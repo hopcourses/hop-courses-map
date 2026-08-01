@@ -1,47 +1,45 @@
 // =====================================
-// Gestion de la Bottom Sheet
+// Bottom Sheet
 // =====================================
 
 const sheet = document.querySelector(".bottom-sheet");
 
-function afficherAucuneCourse() {
+let indexCourse = 0;
 
-sheet.innerHTML = `
+function afficherCourse(index){
 
-<h2>📦 Aucune course disponible</h2>
+    const course = courses[index];
 
-<p>Actualisez votre position ou augmentez votre rayon de recherche.</p>
+    sheet.innerHTML = `
 
-<button class="btn">
-Actualiser
-</button>
+    <div class="course-card">
 
-`;
+        <div class="course-counter">
 
-}
+            📦 ${courses.length === 1 ? "1 course disponible" : courses.length + " courses disponibles"}
 
-function afficherCourse(course){
+        </div>
 
-sheet.innerHTML = `
+        <h2>${course.depart} ➜ ${course.arrivee}</h2>
 
-<h2>${course.depart} ➜ ${course.arrivee}</h2>
+        <p>
 
-<p>
+        💶 <strong>${course.gain}</strong><br><br>
 
-💶 <strong>${course.gain}</strong><br><br>
+        🕒 ${course.heure}<br><br>
 
-🕒 ${course.heure}<br><br>
+        ${course.type}
 
-${course.type}
+        </p>
 
-</p>
+        <button class="btn">
 
-<button class="btn">
+        Voir les détails
 
-Voir la course
+        </button>
 
-</button>
+    </div>
 
-`;
+    `;
 
 }
