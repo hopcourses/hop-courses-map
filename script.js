@@ -1,15 +1,9 @@
-// Création de la carte
-const map = L.map('map', {
-    zoomControl: false
-}).setView([46.603354, 1.888334], 6);
+const map = L.map('map').setView([48.8566, 2.3522], 13);
 
-// Fond de carte OpenStreetMap
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap'
 }).addTo(map);
 
-// Position d'exemple
-const courier = L.marker([48.8566, 2.3522]).addTo(map);
-
-courier.bindPopup("🚚 Vous êtes ici");
+L.marker([48.8566, 2.3522]).addTo(map)
+    .bindPopup("Paris")
+    .openPopup();
