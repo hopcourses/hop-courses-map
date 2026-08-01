@@ -73,8 +73,11 @@ body{
 /* Titre */
 
 .bottom-sheet h2{
-    color:red !important;
-    font-size:14px !important;
+    margin:0 0 14px 0;
+    color:#003366;
+    font-size:20px;
+    line-height:1.25;
+    font-weight:700;
 }
 
 /* Texte */
