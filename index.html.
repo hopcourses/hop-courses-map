@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Hop Courses - Carte</title>
+<title>Hop Courses Map</title>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+<link
+rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
 <link rel="stylesheet" href="style.css">
 
 </head>
@@ -17,14 +23,20 @@
 
 <div class="bottom-sheet">
 
-<h2>📦 Il n'y a actuellement aucune cours disponible</h2>
+<h2>📦 Il n'y a actuellement aucune course disponible</h2>
 
-<p>Modifiez votre périmètre de recherche, actualisez votre localisation ou revenez plus tard !</p>
+<p>Actualisez votre position, étendez le périmètre de recherche ou revenez plus tard.</p>
+
+<button class="btn">
+Actualiser
+</button>
 
 </div>
 
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 <script src="script.js"></script>
 
 </body>
+
 </html>
