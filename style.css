@@ -1,3 +1,7 @@
+/* ==========================================
+   HOP COURSES MAP
+   ========================================== */
+
 html,
 body{
     margin:0;
@@ -9,45 +13,161 @@ body{
     background:#f4f6f8;
 }
 
+/* Carte */
+
 #map{
     position:fixed;
-    top:0;
-    left:0;
-    right:0;
-    bottom:0;
+    inset:0;
     z-index:1;
 }
 
+/* Carte d'informations */
+
 .bottom-sheet{
+
     position:fixed;
-    bottom:20px;
+
     left:50%;
+    bottom:18px;
+
     transform:translateX(-50%);
-    width:92%;
-    max-width:500px;
-    background:white;
-    border-radius:22px;
-    box-shadow:0 10px 30px rgba(0,0,0,.20);
-    padding:20px;
+
+    width:90%;
+    max-width:520px;
+
+    background:#ffffff;
+
+    border-radius:28px;
+
+    padding:24px;
+
+    box-sizing:border-box;
+
+    box-shadow:
+        0 12px 35px rgba(0,0,0,.18);
+
     z-index:999;
+
 }
+
+/* Petite poignée */
+
+.bottom-sheet::before{
+
+    content:"";
+
+    display:block;
+
+    width:55px;
+
+    height:6px;
+
+    border-radius:999px;
+
+    background:#d8d8d8;
+
+    margin:0 auto 20px auto;
+
+}
+
+/* Titre */
 
 .bottom-sheet h2{
+
+    margin:0 0 14px 0;
+
     color:#003366;
-    margin-top:0;
+
+    font-size:26px;
+
+    line-height:1.25;
+
+    font-weight:700;
+
 }
+
+/* Texte */
 
 .bottom-sheet p{
-    color:#666;
+
+    margin:0 0 24px 0;
+
+    color:#666666;
+
+    font-size:17px;
+
+    line-height:1.5;
+
 }
 
+/* Bouton */
+
 .btn{
+
     width:100%;
-    background:#F28C18;
-    color:white;
+
+    height:56px;
+
     border:none;
-    border-radius:12px;
-    padding:15px;
-    font-size:17px;
+
+    border-radius:16px;
+
+    background:#F28C18;
+
+    color:white;
+
+    font-size:19px;
+
+    font-weight:700;
+
     cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.btn:hover{
+
+    background:#e67e00;
+
+}
+
+.btn:active{
+
+    transform:scale(.98);
+
+}
+
+/* Popup Leaflet */
+
+.leaflet-popup-content{
+
+    font-size:15px;
+
+    font-weight:600;
+
+}
+
+/* Zoom */
+
+.leaflet-control-zoom{
+
+    border-radius:14px !important;
+
+    overflow:hidden;
+
+    box-shadow:0 8px 18px rgba(0,0,0,.18);
+
+}
+
+.leaflet-control-zoom a{
+
+    width:38px !important;
+
+    height:38px !important;
+
+    line-height:38px !important;
+
+    font-size:22px !important;
+
 }
