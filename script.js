@@ -1,3 +1,4 @@
+alert("NOUVEAU SCRIPT");
 // =========================
 // Création de la carte
 // =========================
