@@ -1,15 +1,40 @@
-// =============================
-// Initialisation de la carte
-// =============================
+// =====================================
+// Carte
+// =====================================
 
-const map = L.map('map', {
-    zoomControl: false
+const map = L.map('map',{
+
+zoomControl:false
+
 });
 
-// Fond OpenStreetMap
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
-}).addTo(map);
+L.tileLayer(
 
-// Position provisoire
-map.setView([50.77, 2.72], 11);
+'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+
+{
+
+attribution:'© OpenStreetMap'
+
+}
+
+).addTo(map);
+
+map.setView(courses[0].collecte,11);
+
+
+// Création des marqueurs
+
+courses.forEach(course=>{
+
+const marker=L.marker(course.collecte).addTo(map);
+
+marker.on("click",()=>{
+
+afficherCourse(course);
+
+map.panTo(course.collecte);
+
+});
+
+});
