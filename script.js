@@ -9,7 +9,7 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap'
 }).addTo(map);
 
-// Exemple de position du cotransporteur (à remplacer plus tard)
+// Exemple de position du cotransporteur
 const courier = L.marker([48.8566, 2.3522]).addTo(map);
 
 courier.bindPopup("🚚 Vous êtes ici");
