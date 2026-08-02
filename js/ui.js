@@ -2,121 +2,145 @@
 // Hop Courses Map
 // ui.js
 // Gestion de l'interface
+// Sprint 1.2
 // ==========================================================
 
 const sheet = document.querySelector(".sheet-content");
 
 /**
- * Affichage de la fiche course
+ * ----------------------------------------------------------
+ * Affichage de la fiche de la course
+ * ----------------------------------------------------------
  */
 
-function afficherFiche(course, index, total) {
+function afficherFiche(course, index, total){
+
+    if(!sheet) return;
 
     sheet.innerHTML = `
 
-    <div class="course-card">
+        <div class="course-card" id="courseCard">
 
-        <div class="course-counter">
-            ${index + 1} / ${total}
-        </div>
+            <div class="course-counter">
 
-        <div class="course-title">
-            ${course.depart} ➜ ${course.arrivee}
-        </div>
+                ${index + 1} / ${total}
 
-        <div class="course-price">
-            ${course.gain}
-        </div>
+            </div>
 
-        <div class="course-info">
+            <div class="course-title">
 
-            <span>🕒 ${course.heure}</span>
+                ${course.depart} ➜ ${course.arrivee}
 
-            <div class="separator"></div>
+            </div>
 
-            <span>📦 ${course.type}</span>
+            <div class="course-price">
 
-        </div>
+                ${course.gain}
 
-        <div class="divider"></div>
+            </div>
 
-        <div class="locations">
+            <div class="course-info">
 
-            <div class="location">
+                <span>
 
-                <div class="location-title">
+                    🕒 ${course.heure}
 
-                    <span class="dot collect"></span>
+                </span>
 
-                    Collecte
+                <div class="separator"></div>
+
+                <span>
+
+                    📦 ${course.type}
+
+                </span>
+
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="locations">
+
+                <div class="location">
+
+                    <div class="location-title">
+
+                        <span class="dot collect"></span>
+
+                        Collecte
+
+                    </div>
+
+                    <div class="location-city">
+
+                        ${course.depart}
+
+                    </div>
 
                 </div>
 
-                <div class="location-city">
+                <div class="location">
 
-                    ${course.depart}
+                    <div class="location-title">
+
+                        <span class="dot delivery"></span>
+
+                        Livraison
+
+                    </div>
+
+                    <div class="location-city">
+
+                        ${course.arrivee}
+
+                    </div>
 
                 </div>
 
             </div>
 
-            <div class="location">
-
-                <div class="location-title">
-
-                    <span class="dot delivery"></span>
-
-                    Livraison
-
-                </div>
-
-                <div class="location-city">
-
-                    ${course.arrivee}
-
-                </div>
-
-            </div>
-
         </div>
 
-        <button
-            class="btn"
-            id="btnFiche">
+    `;    //--------------------------------------------------------
+    // Toute la fiche est cliquable
+    //--------------------------------------------------------
 
-            Voir la fiche
+    const card = document.getElementById("courseCard");
 
-        </button>
+    if(card){
 
-    </div>
-
-    `;
-
-    //-------------------------------------------------
-    // Ouverture de la fiche Glide
-    //-------------------------------------------------
-
-    document
-        .getElementById("btnFiche")
-        .addEventListener("click", () => {
+        card.addEventListener("click", () => {
 
             ouvrirFiche(course);
 
         });
 
+    }
+
 }
 
 /**
- * Ouverture Glide
- * (provisoire)
+ * ----------------------------------------------------------
+ * Ouverture de la fiche Glide
+ * ----------------------------------------------------------
  */
 
 function ouvrirFiche(course){
 
-    console.log("Order ID :", course.id);
+    console.log("Ouverture de la fiche :", course.id);
 
-    // Sprint 2 :
-    // ouverture automatique de la fiche Glide
-    // avec course.id
+    /*
+        Sprint 1.6
+
+        Ici nous ouvrirons directement
+        la fiche Glide correspondant
+        à course.id.
+
+        Exemple futur :
+
+        window.location.href =
+        "https://....../order/" + course.id;
+
+    */
 
 }
