@@ -86,56 +86,17 @@ function afficherFiche(course,index,total){
 
                 </span>
 
-            <div class="course-row" style="display:flex; align-items:center; gap:8px; width:100%;">
+            <div class="course-route-line" style="display: flex; align-items: center; gap: 8px; margin-top: 6px; width: 100%;">
 
-    <span class="dot collect" style="flex-shrink:0;"></span>
+    <span class="dot collect" style="width: 10px; height: 10px; min-width: 10px; min-height: 10px; border-radius: 50%; background-color: #003366; display: inline-block; flex-shrink: 0;"></span>
 
-    <div style="display:flex; align-items:center; justify-content:center; gap:5px; flex:1; min-width:0;">
-
-        <span style="font-weight:600; color:#111827; white-space:nowrap;">
-            ${course.depart}
-        </span>
-
-        <span style="
-            color:#FF9100;
-            font-size:15px;
-            font-weight:700;
-            line-height:1;
-        ">
-            ➥
-        </span>
-
-        <span style="font-weight:600; color:#111827; white-space:nowrap;">
-            ${course.arrivee}
-        </span>
-
-    </div>
-
-    <span class="dot delivery"
-          style="
-            width:10px;
-            height:10px;
-            border-radius:50%;
-            background:#FF9100;
-            flex-shrink:0;
-          ">
+    <span class="course-text" style="font-weight: 600; font-size: 14px; color: #111827; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+        ${course.depart} <span style="color: #FF9100; font-weight: bold; margin: 0 4px;">➥</span> ${course.arrivee || course.livraison}
     </span>
 
+    <span class="dot delivery" style="width: 10px; height: 10px; min-width: 10px; min-height: 10px; border-radius: 50%; background-color: #FF9100; display: inline-block; flex-shrink: 0;"></span>
+
 </div>
-
-            <!-- Livraison -->
-
-            <div class="course-row">
-
-                <span class="dot delivery"></span>
-
-                <span class="course-text">
-
-                    ${course.arrivee}
-
-                </span>
-
-            </div>
 
         </div>
 
