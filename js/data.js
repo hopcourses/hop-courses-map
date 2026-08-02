@@ -1,9 +1,15 @@
+// =====================================
+// Chargement des données JSON
+// =====================================
+
 alert("data.js chargé");
 
 let courses = [];
 
 async function chargerCourses() {
+
     try {
+
         const response = await fetch("./data.json");
 
         if (!response.ok) {
@@ -12,11 +18,16 @@ async function chargerCourses() {
 
         courses = await response.json();
 
-        alert("Nombre de courses : " + courses.length);
+        console.log("Courses chargées :", courses);
+
+        initialiserApplication();
 
     } catch (error) {
+
         console.error(error);
+
     }
+
 }
 
 chargerCourses();
