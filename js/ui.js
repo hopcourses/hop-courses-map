@@ -1,19 +1,19 @@
 // ==========================================================
 // Hop Courses Map
 // ui.js
-// Gestion de l'interface
 // Sprint 1.2
+// Gestion de la Bottom Sheet
 // ==========================================================
 
 const sheet = document.querySelector(".sheet-content");
 
 /**
  * ----------------------------------------------------------
- * Affichage de la fiche de la course
+ * Affichage de la fiche
  * ----------------------------------------------------------
  */
 
-function afficherFiche(course, index, total){
+function afficherFiche(course,index,total){
 
     if(!sheet) return;
 
@@ -101,46 +101,4 @@ function afficherFiche(course, index, total){
 
         </div>
 
-    `;    //--------------------------------------------------------
-    // Toute la fiche est cliquable
-    //--------------------------------------------------------
-
-    const card = document.getElementById("courseCard");
-
-    if(card){
-
-        card.addEventListener("click", () => {
-
-            ouvrirFiche(course);
-
-        });
-
-    }
-
-}
-
-/**
- * ----------------------------------------------------------
- * Ouverture de la fiche Glide
- * ----------------------------------------------------------
- */
-
-function ouvrirFiche(course){
-
-    console.log("Ouverture de la fiche :", course.id);
-
-    /*
-        Sprint 1.6
-
-        Ici nous ouvrirons directement
-        la fiche Glide correspondant
-        à course.id.
-
-        Exemple futur :
-
-        window.location.href =
-        "https://....../order/" + course.id;
-
-    */
-
-}
+    `;
