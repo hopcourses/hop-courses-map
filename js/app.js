@@ -13,9 +13,10 @@ let animationEnCours = false;
 // Paramètres de l'URL
 // ==========================================================
 
-const params = new URLSearchParams(window.location.search);
+window.emailCotransporteur =
+    new URLSearchParams(window.location.search).get("email");
 
-const emailCotransporteur = params.get("email");
+console.log("Email reçu :", window.emailCotransporteur);
 
 console.log("Email reçu :", emailCotransporteur);
 

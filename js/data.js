@@ -100,10 +100,13 @@ function convertirDate(dateTexte){
  * Chargement du fichier JSON
  * ----------------------------------------------------------
  */
-const params = new URLSearchParams(window.location.search);
 
-const emailCotransporteur = params.get("email");
 async function chargerCourses(){
+
+    // Récupère l'email directement dans l'URL
+    const email = new URLSearchParams(window.location.search).get("email");
+
+    console.log("Email :", email);
 
     try{
 
@@ -113,9 +116,10 @@ async function chargerCourses(){
                 "Content-Type":"application/json"
             },
             body: JSON.stringify({
-                MAIL: emailCotransporteur
+                MAIL: email
             })
         });
+
         console.log(response.url);
 
         if(!response.ok){
@@ -128,7 +132,7 @@ async function chargerCourses(){
 
 courses = JSON.parse(jsonTexte);
 
-        console.log(courses[0].date);
+console.log("Courses chargées :", courses);
 
         initialiserApplication();
 
