@@ -1,16 +1,16 @@
-// =====================================
-// Bottom Sheet Hop Courses
-// =====================================
+// ==========================================================
+// Hop Courses Map
+// ui.js
+// Gestion de l'interface
+// ==========================================================
 
-const sheet = document.querySelector(".bottom-sheet");
+const sheet = document.querySelector(".sheet-content");
 
-function afficherCourse(index){
+/**
+ * Affichage de la fiche course
+ */
 
-    if(!courses || courses.length===0) return;
-
-    const course = courses[index];
-
-    if(!course) return;
+function afficherFiche(course,index,total){
 
     sheet.innerHTML = `
 
@@ -18,139 +18,96 @@ function afficherCourse(index){
 
         <div class="course-counter">
 
-            ${index + 1} / ${courses.length}
+            ${index+1} / ${total}
 
         </div>
 
-        <h2>
+        <div class="course-title">
 
             ${course.depart} ➜ ${course.arrivee}
 
-        </h2>
+        </div>
 
-        <div class="price">
+        <div class="course-price">
 
             ${course.gain}
 
         </div>
 
-        <div class="time">
+        <div class="course-info">
 
-            🕒 ${course.heure}
+            <span>🕐 ${course.heure}</span>
 
-        </div>
+            <div class="separator"></div>
 
-        <div class="type">
-
-            📦 ${course.type}
+            <span>${course.type}</span>
 
         </div>
 
-        <div class="separator"></div>
+        <div class="divider"></div>
 
-        <div class="bloc">
+        <div class="locations">
 
-            <div class="bloc-title">
+            <div class="location collect">
 
-                🔵 Collecte
+                <div class="location-title">
+
+                    <span class="dot collect"></span>
+
+                    Collecte
+
+                </div>
+
+                <div class="location-city">
+
+                    ${course.marchand}
+
+                </div>
 
             </div>
 
-            <div class="bloc-content">
+            <div class="location delivery">
 
-                ${course.depart}
+                <div class="location-title">
 
-            </div>
+                    <span class="dot delivery"></span>
 
-        </div>
+                    Livraison
 
-        <div class="separator"></div>
+                </div>
 
-        <div class="bloc">
+                <div class="location-city">
 
-            <div class="bloc-title">
+                    ${course.arrivee}
 
-                🔴 Livraison
-
-            </div>
-
-            <div class="bloc-content">
-
-                ${course.arrivee}
+                </div>
 
             </div>
 
         </div>
 
-        <div class="navigation">
+        <button
+            class="btn"
+            id="btnFiche">
 
-            <button class="nav-btn" id="btnPrev">
+            Voir la fiche
 
-                ◀
-
-            </button>
-
-            <button class="btn" id="btnDetails">
-
-                Voir les détails
-
-            </button>
-
-            <button class="nav-btn" id="btnNext">
-
-                ▶
-
-            </button>
-
-        </div>
+        </button>
 
     </div>
 
     `;
 
-    // -------------------------
-    // Navigation
-    // -------------------------
+    // --------------------------
+    // Ouverture Glide
+    // --------------------------
 
-    document.getElementById("btnPrev").onclick = () => {
+    document
+        .getElementById("btnFiche")
+        .addEventListener("click",()=>{
 
-        if(indexCourse > 0){
+        ouvrirFiche(course);
 
-            indexCourse--;
-
-            afficherCourse(indexCourse);
-
-            afficherItineraire(courses[indexCourse]);
-
-        }
-
-    };
-
-    document.getElementById("btnNext").onclick = () => {
-
-        if(indexCourse < courses.length - 1){
-
-            indexCourse++;
-
-            afficherCourse(indexCourse);
-
-            afficherItineraire(courses[indexCourse]);
-
-        }
-
-    };
-
-    // -------------------------
-    // Détails (à connecter à Glide)
-    // -------------------------
-
-    document.getElementById("btnDetails").onclick = () => {
-
-        console.log("Order ID :", course.id);
-
-        // Ici on ouvrira la fiche Glide
-        // avec l'Order_ID
-
-    };
+    });
 
 }
