@@ -1,6 +1,7 @@
 /* ==========================================================
    HOP COURSES MAP
-   VERSION 1.0
+   STYLE.CSS V2
+   PARTIE 1 / 3
    ========================================================== */
 
    :root{
@@ -11,10 +12,16 @@
 
     --background:#F5F7FA;
 
-    --text:#1d1d1f;
-    --text-light:#6b7280;
+    --text:#1D1D1F;
+    --text-light:#6B7280;
 
-    --shadow:0 18px 45px rgba(0,0,0,.18);
+    --sheet-width:84%;
+    --sheet-max-width:385px;
+
+    --radius:28px;
+
+    --shadow:
+        0 12px 30px rgba(0,0,0,.16);
 
 }
 
@@ -22,6 +29,7 @@
 
     margin:0;
     padding:0;
+
     box-sizing:border-box;
 
 }
@@ -34,19 +42,20 @@ body{
 
     overflow:hidden;
 
+    background:var(--background);
+
     font-family:
+
         Inter,
-        SF Pro Display,
+        "SF Pro Display",
         Arial,
         sans-serif;
 
-    background:var(--background);
-
 }
 
-/* ===============================
+/* ==========================================================
    MAP
-================================ */
+   ========================================================== */
 
 #map{
 
@@ -58,43 +67,67 @@ body{
 
 }
 
-/* ===============================
+/* ==========================================================
    BOTTOM SHEET
-================================ */
+   ========================================================== */
 
 .bottom-sheet{
 
     position:fixed;
 
     left:50%;
-    bottom:16px;
+
+    bottom:10px;
 
     transform:translateX(-50%);
 
-    width:88%;
-    max-width:470px;
+    width:var(--sheet-width);
 
-    background:#fff;
+    max-width:var(--sheet-max-width);
 
-    border-radius:30px;
+    background:#FFF;
 
-    box-shadow:var(--shadow);
-
-    z-index:999;
+    border-radius:var(--radius);
 
     overflow:hidden;
 
+    z-index:999;
+
+    box-shadow:var(--shadow);
+
+    transition:
+
+        transform .25s ease,
+
+        box-shadow .25s ease;
+
 }
 
-/* contenu */
+.bottom-sheet:hover{
+
+    box-shadow:
+
+        0 18px 40px rgba(0,0,0,.18);
+
+}
+
+/* ==========================================================
+   CONTENU
+   ========================================================== */
 
 .sheet-content{
 
-    padding:18px 22px 24px;
+    padding:
+
+        10px
+        18px
+        16px;
 
 }
 
-/* poignée */
+/* ==========================================================
+   POIGNÉE
+   ========================================================== */
 
 .bottom-sheet::before{
 
@@ -102,79 +135,103 @@ body{
 
     display:block;
 
-    width:56px;
+    width:44px;
 
-    height:6px;
-
-    background:#d8d8d8;
+    height:5px;
 
     border-radius:999px;
 
-    margin:12px auto 8px;
+    background:#D8D8D8;
+
+    margin:
+
+        10px
+        auto
+        8px;
 
 }
 
-/* ===============================
-   LOADING
-================================ */
+/* ==========================================================
+   CHARGEMENT
+   ========================================================== */
 
 .loading{
+
+    padding:45px 15px;
 
     text-align:center;
 
     color:#888;
 
-    padding:50px 20px;
+    font-size:15px;
 
 }
 
-/* ===============================
+/* ==========================================================
+   COURSE CARD
+   ========================================================== */
+
+.course-card{
+
+    display:flex;
+
+    flex-direction:column;
+
+    width:100%;
+
+}
+
+/* ==========================================================
    RESPONSIVE
-================================ */
+   ========================================================== */
 
-@media (max-width:480px){
+@media(max-width:430px){
 
-.bottom-sheet{
+    .bottom-sheet{
 
-    width:92%;
+        width:86%;
 
-    bottom:12px;
+        bottom:8px;
 
-}
-
-.sheet-content{
-
-    padding:16px;
+    }
 
 }
 
-}
+@media(min-width:700px){
 
-@media (min-width:700px){
+    .bottom-sheet{
 
-.bottom-sheet{
+        max-width:420px;
 
-    max-width:520px;
-
-}
+    }
 
 }/* ==========================================================
-   CARTE COURSE
-========================================================== */
+   STYLE.CSS V2
+   PARTIE 2 / 3
+   CONTENU DE LA FICHE
+   ========================================================== */
+
+/* ===============================
+   Compteur
+================================ */
 
 .course-counter{
 
     text-align:center;
 
-    color:var(--blue);
+    color:var(--text-light);
 
-    font-size:15px;
+    font-size:12px;
 
-    font-weight:700;
+    font-weight:600;
 
-    margin-bottom:12px;
+    margin-bottom:6px;
 
 }
+
+/* ===============================
+   Titre
+================================ */
 
 .course-title{
 
@@ -182,15 +239,19 @@ body{
 
     color:var(--blue);
 
-    font-size:34px;
+    font-size:20px;
 
     font-weight:700;
 
-    line-height:1.2;
+    line-height:1.25;
 
-    margin-bottom:18px;
+    margin-bottom:10px;
 
 }
+
+/* ===============================
+   Prix
+================================ */
 
 .course-price{
 
@@ -198,17 +259,17 @@ body{
 
     color:var(--orange);
 
-    font-size:52px;
+    font-size:26px;
 
     font-weight:800;
 
-    margin-bottom:18px;
+    margin-bottom:10px;
 
 }
 
-/* ==========================================================
-   INFOS
-========================================================== */
+/* ===============================
+   Heure + Type
+================================ */
 
 .course-info{
 
@@ -218,13 +279,13 @@ body{
 
     align-items:center;
 
-    gap:12px;
+    gap:10px;
+
+    font-size:13px;
 
     color:var(--text-light);
 
-    font-size:18px;
-
-    margin-bottom:16px;
+    margin-bottom:10px;
 
 }
 
@@ -232,15 +293,15 @@ body{
 
     width:1px;
 
-    height:18px;
+    height:14px;
 
     background:#E5E7EB;
 
 }
 
-/* ==========================================================
-   LIGNE
-========================================================== */
+/* ===============================
+   Séparateur
+================================ */
 
 .divider{
 
@@ -250,13 +311,13 @@ body{
 
     background:#ECECEC;
 
-    margin:18px 0;
+    margin:10px 0;
 
 }
 
-/* ==========================================================
-   ADRESSES
-========================================================== */
+/* ===============================
+   Collecte / Livraison
+================================ */
 
 .locations{
 
@@ -264,7 +325,7 @@ body{
 
     justify-content:space-between;
 
-    gap:24px;
+    gap:18px;
 
 }
 
@@ -282,25 +343,41 @@ body{
 
     gap:8px;
 
-    margin-bottom:10px;
+    color:var(--blue);
 
-    font-size:20px;
+    font-size:14px;
 
     font-weight:700;
 
+    margin-bottom:6px;
+
 }
 
-/* ==========================================================
-   PUCES
-========================================================== */
+.location-city{
+
+    color:var(--text);
+
+    font-size:15px;
+
+    line-height:1.35;
+
+    font-weight:500;
+
+}
+
+/* ===============================
+   Pastilles
+================================ */
 
 .dot{
 
-    width:16px;
+    width:12px;
 
-    height:16px;
+    height:12px;
 
     border-radius:50%;
+
+    flex-shrink:0;
 
 }
 
@@ -316,195 +393,99 @@ body{
 
 }
 
-.location.collect .location-title{
-
-    color:#003366;
-
-}
-
-.location.delivery .location-title{
-
-    color:#003366;
-
-}
-
-.location-city{
-
-    color:#444;
-
-    font-size:22px;
-
-    font-weight:500;
-
-    line-height:1.4;
-
-}
-
-/* ==========================================================
-   BOUTON
-========================================================== */
+/* ===============================
+   Bouton
+================================ */
 
 .btn{
 
-    margin-top:22px;
-
     width:100%;
 
-    height:58px;
+    height:42px;
+
+    margin-top:14px;
 
     border:none;
 
-    border-radius:18px;
+    border-radius:14px;
 
-    background:#F28C18;
+    background:var(--orange);
 
-    color:white;
+    color:#FFF;
 
-    font-size:22px;
+    font-size:15px;
 
     font-weight:700;
 
     cursor:pointer;
 
-    transition:.25s;
+    transition:
+
+        background .25s,
+
+        transform .15s;
+
+}
+
+.btn:hover{
+
+    background:#DF7F12;
+
+}
+
+.btn:active{
+
+    transform:scale(.98);
 
 }/* ==========================================================
+   STYLE.CSS V2
+   PARTIE 3 / 3
    FINITIONS PREMIUM
-========================================================== */
+   ========================================================== */
 
-/* Animation légère */
-
-.bottom-sheet{
-
-    transition:
-        transform .30s ease,
-        box-shadow .30s ease;
-
-}
-
-.bottom-sheet:hover{
-
-    box-shadow:
-        0 22px 55px rgba(0,0,0,.20);
-
-}
-
-/* La carte reste bien visible */
-
-.course-card{
-
-    display:flex;
-
-    flex-direction:column;
-
-}
-
-/* compteur */
-
-.course-counter{
-
-    font-size:14px;
-
-    margin-bottom:8px;
-
-}
-
-/* titre */
-
-.course-title{
-
-    font-size:30px;
-
-    margin-bottom:12px;
-
-}
-
-/* prix */
-
-.course-price{
-
-    font-size:44px;
-
-    margin-bottom:14px;
-
-}
-
-/* informations */
-
-.course-info{
-
-    font-size:15px;
-
-    margin-bottom:14px;
-
-}
-
-/* séparateur */
-
-.divider{
-
-    margin:14px 0;
-
-}
-
-/* collecte / livraison */
-
-.location-title{
-
-    font-size:17px;
-
-}
-
-.location-city{
-
-    font-size:17px;
-
-    line-height:1.35;
-
-}
-
-/* bouton */
-
-.btn{
-
-    margin-top:18px;
-
-    height:50px;
-
-    font-size:17px;
-
-    border-radius:16px;
-
-}
-
-/* Préparation du Swipe */
+/* ===============================
+   Animations
+================================ */
 
 .bottom-sheet{
 
-    touch-action:pan-y;
-
-    user-select:none;
+    animation:sheetAppear .35s ease;
 
 }
 
-/* Animation des boutons */
+@keyframes sheetAppear{
 
-button{
+    from{
 
-    transition:
-        background .20s,
-        transform .20s,
-        opacity .20s;
+        transform:
+            translateX(-50%)
+            translateY(20px);
+
+        opacity:0;
+
+    }
+
+    to{
+
+        transform:
+            translateX(-50%)
+            translateY(0);
+
+        opacity:1;
+
+    }
 
 }
 
-button:active{
+/* ===============================
+   Leaflet
+================================ */
 
-    transform:scale(.97);
+.leaflet-container{
+
+    background:#EEF2F5;
 
 }
-
-/* Leaflet */
 
 .leaflet-control-zoom{
 
@@ -515,82 +496,143 @@ button:active{
     overflow:hidden;
 
     box-shadow:
-        0 10px 25px rgba(0,0,0,.18);
+
+        0 8px 18px rgba(0,0,0,.18);
 
 }
 
 .leaflet-control-zoom a{
 
-    width:42px !important;
+    width:38px !important;
 
-    height:42px !important;
+    height:38px !important;
 
-    line-height:42px !important;
+    line-height:38px !important;
 
-    font-size:22px !important;
+    font-size:20px !important;
 
 }
 
-/* Popup */
+/* ===============================
+   Popups
+================================ */
 
 .leaflet-popup-content{
 
-    font-size:15px;
+    font-size:13px;
+
+    font-weight:600;
 
 }
 
-/* Mobile */
+.leaflet-popup-tip-container{
 
-@media(max-width:430px){
-
-.course-title{
-
-    font-size:27px;
+    display:none;
 
 }
 
-.course-price{
-
-    font-size:40px;
-
-}
-
-.location-city{
-
-    font-size:16px;
-
-}
-
-.btn{
-
-    height:48px;
-
-    font-size:16px;
-
-}
-
-}
-
-/* Tablette */
-
-@media(min-width:700px){
+/* ===============================
+   Swipe (préparation)
+================================ */
 
 .bottom-sheet{
 
-    max-width:480px;
+    touch-action:pan-y;
+
+    user-select:none;
+
+    -webkit-user-select:none;
 
 }
 
-}
+/* ===============================
+   Boutons
+================================ */
 
-.btn:hover{
+button{
 
-    background:#df7f12;
-
-}
-
-.btn:active{
-
-    transform:scale(.98);
+    -webkit-tap-highlight-color:transparent;
 
 }
+
+/* ===============================
+   Mobile
+================================ */
+
+@media(max-width:430px){
+
+    .course-title{
+
+        font-size:18px;
+
+    }
+
+    .course-price{
+
+        font-size:24px;
+
+    }
+
+    .course-info{
+
+        font-size:12px;
+
+    }
+
+    .location-title{
+
+        font-size:13px;
+
+    }
+
+    .location-city{
+
+        font-size:14px;
+
+    }
+
+    .btn{
+
+        height:40px;
+
+        font-size:14px;
+
+    }
+
+}
+
+/* ===============================
+   Très petits écrans
+================================ */
+
+@media(max-width:360px){
+
+    .bottom-sheet{
+
+        width:90%;
+
+    }
+
+    .sheet-content{
+
+        padding:10px 14px 14px;
+
+    }
+
+    .course-title{
+
+        font-size:17px;
+
+    }
+
+    .course-price{
+
+        font-size:22px;
+
+    }
+
+}
+
+/* ==========================================================
+   FIN
+   ========================================================== */
