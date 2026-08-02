@@ -4,7 +4,6 @@
 
 const sheet = document.querySelector(".bottom-sheet");
 
-let indexCourse = 0;
 
 function afficherCourse(index){
 

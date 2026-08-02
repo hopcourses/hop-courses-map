@@ -49,5 +49,3 @@ function afficherItineraire(course){
     });
 
 }
-
-afficherItineraire(courses[0]);
