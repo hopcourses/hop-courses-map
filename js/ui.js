@@ -86,17 +86,42 @@ function afficherFiche(course,index,total){
 
                 </span>
 
-            <div class="course-row" style="display: flex; align-items: center; gap: 6px;">
-    <span class="dot collect"></span>
+            <div class="course-row" style="display:flex; align-items:center; gap:8px; width:100%;">
 
-    <span class="course-text" style="font-weight: 600; color: #111827;">
-        ${course.depart} <span style="color: #FF9100; font-weight: bold; margin: 0 2px;">➥</span> ${course.arrivee || course.livraison}
+    <span class="dot collect" style="flex-shrink:0;"></span>
+
+    <div style="display:flex; align-items:center; justify-content:center; gap:5px; flex:1; min-width:0;">
+
+        <span style="font-weight:600; color:#111827; white-space:nowrap;">
+            ${course.depart}
+        </span>
+
+        <span style="
+            color:#FF9100;
+            font-size:15px;
+            font-weight:700;
+            line-height:1;
+        ">
+            ➥
+        </span>
+
+        <span style="font-weight:600; color:#111827; white-space:nowrap;">
+            ${course.arrivee}
+        </span>
+
+    </div>
+
+    <span class="dot delivery"
+          style="
+            width:10px;
+            height:10px;
+            border-radius:50%;
+            background:#FF9100;
+            flex-shrink:0;
+          ">
     </span>
 
-    <span class="dot delivery" style="width: 10px; height: 10px; border-radius: 50%; background-color: #FF9100; display: inline-block; flex-shrink: 0;"></span>
 </div>
-
-            </div>
 
             <!-- Livraison -->
 
