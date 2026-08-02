@@ -137,7 +137,7 @@ body{
 
     text-align:center;
 
-    font-size:13px;
+    font-size:15px;
 
     font-weight:600;
 
@@ -422,13 +422,13 @@ body{
 
     .course-date{
 
-        font-size:16px;
+        font: size 20px;
 
     }
 
     .course-price{
 
-        font-size:25px;
+        font-size:20px;
 
     }
 
