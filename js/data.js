@@ -4,7 +4,7 @@ let courses = [];
 
 async function chargerCourses() {
     try {
-        const response = await fetch("../data.json");
+        const response = await fetch("./data.json");
 
         if (!response.ok) {
             throw new Error("Impossible de charger data.json");
@@ -12,7 +12,7 @@ async function chargerCourses() {
 
         courses = await response.json();
 
-        console.log("Courses chargées :", courses);
+        alert("Nombre de courses : " + courses.length);
 
     } catch (error) {
         console.error(error);
