@@ -4,10 +4,13 @@
 
 const sheet = document.querySelector(".bottom-sheet");
 
+function afficherCourse(index) {
 
-function afficherCourse(index){
+    if (!courses || courses.length === 0) return;
 
     const course = courses[index];
+
+    if (!course) return;
 
     sheet.innerHTML = `
 
@@ -15,7 +18,7 @@ function afficherCourse(index){
 
         <div class="course-counter">
 
-            📦 ${courses.length === 1 ? "1 course disponible" : courses.length + " courses disponibles"}
+            📦 ${courses.length} course${courses.length > 1 ? "s" : ""} disponible${courses.length > 1 ? "s" : ""}
 
         </div>
 
@@ -23,17 +26,17 @@ function afficherCourse(index){
 
         <p>
 
-        💶 <strong>${course.gain}</strong><br><br>
+            💶 <strong>${course.gain}</strong><br><br>
 
-        🕒 ${course.heure}<br><br>
+            🕒 ${course.heure}<br><br>
 
-        ${course.type}
+            📦 ${course.type}
 
         </p>
 
-        <button class="btn">
+        <button class="btn" id="btnDetails">
 
-        Voir les détails
+            Voir les détails
 
         </button>
 

@@ -1,12 +1,18 @@
 // =====================================
-// Initialisation
+// Application
 // =====================================
 
 let indexCourse = 0;
 
 function initialiserApplication() {
 
-    if (courses.length === 0) return;
+    if (!courses || courses.length === 0) {
+
+        console.log("Aucune course disponible.");
+
+        return;
+
+    }
 
     indexCourse = 0;
 
