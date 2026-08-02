@@ -240,7 +240,7 @@ function afficherCarte(course){
 
         map.panBy(
 
-            [200,-90],
+            [90,90],
 
             {
 
@@ -298,7 +298,7 @@ function recentrerCarte(course){
 
         map.panBy(
 
-            [-40,90],
+            [90,90],
 
             {
 
