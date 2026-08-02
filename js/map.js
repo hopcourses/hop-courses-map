@@ -3,7 +3,6 @@
 // map.js
 // Sprint 2.7
 // Gestion de la carte Leaflet
-// Partie 1 / 3
 // ==========================================================
 
 let map = null;
@@ -109,14 +108,14 @@ function afficherCarte(course){
     ).addTo(map);
 
     //--------------------------------------------------------
-    // Cadrage parfait automatique
+    // Cadrage libre
     //--------------------------------------------------------
     recentrerCarte(course);
 }
 
 /**
  * ----------------------------------------------------------
- * Centre la carte sur la course courante
+ * Centre la carte sur la course courante (Vue élargie)
  * ----------------------------------------------------------
  */
 function recentrerCarte(course){
@@ -128,13 +127,13 @@ function recentrerCarte(course){
         bounds,
         {
             animate: true,
-            duration: 0.8,
-            // [Haut, Gauche] : Laisse 60px en haut
-            paddingTopLeft: [60, 60],
-            // [Bas, Droite] : Laisse 280px en bas pour ne PAS cacher sous la carte blanche !
-            paddingBottomRight: [280, 60],
-            // On autorise un zoom jusqu'à 16 pour bien voir les trajets courts
-            maxZoom: 15
+            duration: 0.6,
+            // On laisse 50px de marge en haut et sur les côtés
+            paddingTopLeft: [50, 50],
+            // On réserve environ 180px en bas pour l'encadré d'information
+            paddingBottomRight: [50, 180],
+            // maxZoom assoupli pour voir la vue globale de haut si nécessaire
+            maxZoom: 12
         }
     );
 }
