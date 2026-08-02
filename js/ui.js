@@ -34,21 +34,21 @@ function afficherFiche(course, index, total) {
                 </div>
             </div>
 
-            <div class="course-row">
-                <span class="course-icon">🕒</span>
-                <span class="course-text">
+            <div class="course-row" style="display: flex !important; align-items: center; gap: 8px; width: 100%;">
+                <span class="course-icon" style="flex-shrink: 0; width: 20px; text-align: center;">🕒</span>
+                <span class="course-text" style="flex: 1; min-width: 0; display: block;">
                     ${course.heure}
                 </span>
             </div>
 
-            <div class="course-row">
-                <span class="course-icon">📦</span>
-                <span class="course-text">
+            <div class="course-row" style="display: flex !important; align-items: center; gap: 8px; width: 100%; margin-bottom: 14px;">
+                <span class="course-icon" style="flex-shrink: 0; width: 20px; text-align: center;">📦</span>
+                <span class="course-text" style="flex: 1; min-width: 0; display: block;">
                     ${course.type}
                 </span>
             </div>
 
-            <div class="course-route-line" style="display: flex; align-items: center; gap: 8px; margin-top: 8px; padding-top: 6px; border-top: 1px solid #F3F4F6; width: 100%;">
+            <div class="course-route-line" style="display: flex; align-items: center; gap: 8px; margin-top: 0; padding-top: 10px; border-top: 1px solid #F3F4F6; width: 100%;">
                 <span class="dot collect" style="width: 10px; height: 10px; min-width: 10px; min-height: 10px; border-radius: 50%; background-color: #003366; display: inline-block; flex-shrink: 0;"></span>
 
                 <span class="course-text" style="font-weight: 600; font-size: 14px; color: #111827; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
