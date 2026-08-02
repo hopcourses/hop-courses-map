@@ -240,7 +240,7 @@ function afficherCarte(course){
 
         map.panBy(
 
-            [-40,-40],
+            [200,-90],
 
             {
 
