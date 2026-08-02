@@ -1,7 +1,7 @@
 // ==========================================================
 // Hop Courses Map
 // map.js
-// Sprint 2.7
+// Sprint 2.7.1
 // Gestion de la carte Leaflet
 // ==========================================================
 
@@ -30,6 +30,27 @@ function initialiserCarte(){
             maxZoom: 19
         }
     ).addTo(map);
+
+    //--------------------------------------------------------
+    // Fix : le composant custom Glide (iframe) redimensionne
+    // parfois le conteneur #map après le premier rendu, ou la
+    // taille n'est pas encore stable à l'initialisation.
+    // Sans invalidateSize(), fitBounds() calcule son cadrage
+    // sur une taille de conteneur erronée : l'itinéraire part
+    // alors vers le haut ou le bas et sort du cadre visible.
+    // On garde Leaflet synchronisé en continu.
+    //--------------------------------------------------------
+    const conteneurCarte = document.getElementById("map");
+
+    if (conteneurCarte && window.ResizeObserver) {
+        new ResizeObserver(() => {
+            map.invalidateSize({ animate: false });
+        }).observe(conteneurCarte);
+    }
+
+    window.addEventListener("resize", () => {
+        map.invalidateSize({ animate: false });
+    });
 }
 
 /**
@@ -120,6 +141,11 @@ function afficherCarte(course){
  */
 function recentrerCarte(course){
     if(!itineraire){ return; }
+
+    // Fix : on force le recalcul de la taille réelle du conteneur
+    // AVANT de cadrer, sinon les paddings ci-dessous sont appliqués
+    // sur une taille obsolète et l'itinéraire sort du cadre.
+    map.invalidateSize({ animate: false });
 
     const bounds = itineraire.getBounds();
 
