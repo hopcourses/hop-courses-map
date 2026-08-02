@@ -50,7 +50,7 @@ function afficherCarte(course){
     if(itineraire){ map.removeLayer(itineraire); }
 
     //--------------------------------------------------------
-    // Icône collecte
+    // Icône collecte (conservée selon tes paramètres)
     //--------------------------------------------------------
     const iconeCollecte = L.divIcon({
         className: "",
@@ -69,7 +69,7 @@ function afficherCarte(course){
     });
 
     //--------------------------------------------------------
-    // Icône livraison
+    // Icône livraison (conservée selon tes paramètres)
     //--------------------------------------------------------
     const iconeLivraison = L.divIcon({
         className: "",
@@ -108,14 +108,14 @@ function afficherCarte(course){
     ).addTo(map);
 
     //--------------------------------------------------------
-    // Cadrage libre
+    // Cadrage adapté au panneau Shopopop
     //--------------------------------------------------------
     recentrerCarte(course);
 }
 
 /**
  * ----------------------------------------------------------
- * Centre la carte sur la course courante (Vue élargie)
+ * Centre la carte sur la course courante (Adapté panneau bas)
  * ----------------------------------------------------------
  */
 function recentrerCarte(course){
@@ -127,13 +127,13 @@ function recentrerCarte(course){
         bounds,
         {
             animate: true,
-            duration: 0.6,
-            // On laisse 50px de marge en haut et sur les côtés
+            duration: 0.8,
+            // [Haut, Gauche] : Marge en haut et à gauche
             paddingTopLeft: [50, 50],
-            // On réserve environ 180px en bas pour l'encadré d'information
-            paddingBottomRight: [50, 180],
-            // maxZoom assoupli pour voir la vue globale de haut si nécessaire
-            maxZoom: 12
+            // [Bas, Droite] : Réserve 240px en bas pour libérer la zone de la carte Shopopop
+            paddingBottomRight: [50, 240],
+            // maxZoom ajusté pour garder la vue bien cadrée
+            maxZoom: 13.5
         }
     );
 }
