@@ -101,4 +101,46 @@ function afficherFiche(course,index,total){
 
         </div>
 
-    `;
+    `;    
+    //--------------------------------------------------------
+    // Toute la fiche est cliquable
+    //--------------------------------------------------------
+
+    const card = document.getElementById("courseCard");
+
+    if(card){
+
+        card.addEventListener("click", () => {
+
+            ouvrirFiche(course);
+
+        });
+
+    }
+
+}
+/**
+ * ----------------------------------------------------------
+ * Ouverture de la fiche Glide
+ * ----------------------------------------------------------
+ */
+
+function ouvrirFiche(course){
+
+    console.log("Ouverture de la fiche :", course.id);
+
+    // ------------------------------------------------------
+    // Sprint 1.6
+    //
+    // Toute la carte blanche est cliquable.
+    // Cette fonction ouvrira directement la fiche
+    // Glide correspondant à l'Order_ID.
+    //
+    // Exemple futur :
+    //
+    // window.location.href =
+    // "https://ton-application-glide...?orderId=" + course.id;
+    //
+    // ------------------------------------------------------
+
+}
