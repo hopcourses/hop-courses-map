@@ -1,16 +1,19 @@
-// =====================================
-// Chargement des données JSON
-// =====================================
-
-alert("data.js chargé");
+// ==========================================================
+// Hop Courses Map
+// data.js
+// Chargement des données
+// ==========================================================
 
 let courses = [];
 
+/**
+ * Charge le fichier JSON
+ */
 async function chargerCourses() {
 
     try {
 
-        const response = await fetch("./data.json");
+        const response = await fetch("data.json");
 
         if (!response.ok) {
             throw new Error("Impossible de charger data.json");
@@ -18,7 +21,7 @@ async function chargerCourses() {
 
         courses = await response.json();
 
-        console.log("Courses chargées :", courses);
+        console.log("✅ Courses chargées :", courses);
 
         initialiserApplication();
 
@@ -26,8 +29,16 @@ async function chargerCourses() {
 
         console.error(error);
 
+        document.querySelector(".sheet-content").innerHTML = `
+
+            <div class="loading">
+
+                Impossible de charger les courses.
+
+            </div>
+
+        `;
+
     }
 
 }
-
-chargerCourses();

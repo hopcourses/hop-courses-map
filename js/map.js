@@ -1,55 +1,209 @@
-// =====================================
-// Carte Leaflet
-// =====================================
+// ==========================================================
+// Hop Courses Map
+// map.js
+// Gestion de la carte Leaflet
+// ==========================================================
 
-const map = L.map("map", {
-    zoomControl: false
-});
+let map;
 
-// Fond OpenStreetMap
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: "© OpenStreetMap"
-}).addTo(map);
-
-// Objets de la carte
 let markerCollecte = null;
 let markerLivraison = null;
-let ligne = null;
+let itineraire = null;
 
-// =====================================
-// Afficher un itinéraire
-// =====================================
+/**
+ * Initialisation de la carte
+ */
 
-function afficherItineraire(course) {
+function initialiserCarte(){
 
-    if (!course) return;
+    map = L.map("map",{
 
-    // Suppression des anciens éléments
-    if (markerCollecte) map.removeLayer(markerCollecte);
-    if (markerLivraison) map.removeLayer(markerLivraison);
-    if (ligne) map.removeLayer(ligne);
+        zoomControl:true,
 
-    // Marqueur collecte (bleu)
-    markerCollecte = L.marker(course.collecte).addTo(map);
+        attributionControl:false
 
-    // Marqueur livraison (rouge)
-    markerLivraison = L.marker(course.livraison).addTo(map);
+    });
 
-    // Ligne entre les deux
-    ligne = L.polyline(
-        [
-            course.collecte,
-            course.livraison
-        ],
+    L.tileLayer(
+
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+
         {
-            color: "#F28C18",
-            weight: 5
+
+            maxZoom:19
+
         }
+
     ).addTo(map);
 
-    // Ajuste automatiquement le zoom
-    map.fitBounds(ligne.getBounds(), {
-        padding: [50, 50]
+}
+
+/**
+ * Affichage d'une course
+ */
+
+function afficherCarte(course){
+
+    if(!map){
+
+        initialiserCarte();
+
+    }
+
+    // -----------------------------
+    // Suppression anciens éléments
+    // -----------------------------
+
+    if(markerCollecte){
+
+        map.removeLayer(markerCollecte);
+
+    }
+
+    if(markerLivraison){
+
+        map.removeLayer(markerLivraison);
+
+    }
+
+    if(itineraire){
+
+        map.removeLayer(itineraire);
+
+    }
+
+    // -----------------------------
+    // Icône collecte
+    // -----------------------------
+
+    const iconeCollecte = L.divIcon({
+
+        className:"",
+
+        html:`
+
+        <div style="
+
+            width:18px;
+
+            height:18px;
+
+            border-radius:50%;
+
+            background:#003366;
+
+            border:3px solid white;
+
+            box-shadow:0 0 10px rgba(0,0,0,.25);
+
+        "></div>
+
+        `,
+
+        iconSize:[18,18],
+
+        iconAnchor:[9,9]
+
     });
+
+    // -----------------------------
+    // Icône livraison
+    // -----------------------------
+
+    const iconeLivraison = L.divIcon({
+
+        className:"",
+
+        html:`
+
+        <div style="
+
+            width:18px;
+
+            height:18px;
+
+            border-radius:50%;
+
+            background:#FF9100;
+
+            border:3px solid white;
+
+            box-shadow:0 0 10px rgba(0,0,0,.25);
+
+        "></div>
+
+        `,
+
+        iconSize:[18,18],
+
+        iconAnchor:[9,9]
+
+    });
+
+    markerCollecte = L.marker(
+
+        course.collecte,
+
+        {
+
+            icon:iconeCollecte
+
+        }
+
+    ).addTo(map);
+
+    markerLivraison = L.marker(
+
+        course.livraison,
+
+        {
+
+            icon:iconeLivraison
+
+        }
+
+    ).addTo(map);
+
+    // -----------------------------
+    // Ligne
+    // -----------------------------
+
+    itineraire = L.polyline(
+
+        [
+
+            course.collecte,
+
+            course.livraison
+
+        ],
+
+        {
+
+            color:"#FF9100",
+
+            weight:5,
+
+            opacity:.9
+
+        }
+
+    ).addTo(map);
+
+    // -----------------------------
+    // Zoom automatique
+    // -----------------------------
+
+    map.fitBounds(
+
+        itineraire.getBounds(),
+
+        {
+
+            padding:[70,70]
+
+        }
+
+    );
 
 }

@@ -1,29 +1,85 @@
-// =====================================
-// Application Hop Courses
-// =====================================
+// ==========================================================
+// Hop Courses Map
+// app.js
+// Application principale
+// ==========================================================
 
 let indexCourse = 0;
 
+/**
+ * Affiche la course courante
+ */
+
 function afficherCourseCourante(){
 
-    afficherCourse(indexCourse);
-
-    afficherItineraire(courses[indexCourse]);
-
-}
-
-function initialiserApplication(){
-
-    if(!courses || courses.length===0){
-
-        console.log("Aucune course disponible.");
+    if(courses.length===0){
 
         return;
 
     }
 
-    indexCourse = 0;
+    const course = courses[indexCourse];
+
+    afficherCarte(course);
+
+    afficherFiche(course,indexCourse,courses.length);
+
+}
+
+/**
+ * Course suivante
+ */
+
+function courseSuivante(){
+
+    if(indexCourse>=courses.length-1){
+
+        return;
+
+    }
+
+    indexCourse++;
 
     afficherCourseCourante();
 
 }
+
+/**
+ * Course précédente
+ */
+
+function coursePrecedente(){
+
+    if(indexCourse<=0){
+
+        return;
+
+    }
+
+    indexCourse--;
+
+    afficherCourseCourante();
+
+}
+
+/**
+ * Démarrage
+ */
+
+function initialiserApplication(){
+
+    console.log("Application prête.");
+
+    afficherCourseCourante();
+
+}
+
+/**
+ * Chargement
+ */
+
+document.addEventListener("DOMContentLoaded",()=>{
+
+    chargerCourses();
+
+});
