@@ -29,9 +29,9 @@ function afficherFiche(course,index,total){
 
             <div class="course-title">
 
-                ${course.depart} ➜ ${course.arrivee}
+    ${course.date}
 
-            </div>
+</div>
 
             <div class="course-price">
 
