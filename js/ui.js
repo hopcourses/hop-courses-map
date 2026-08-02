@@ -10,37 +10,31 @@ const sheet = document.querySelector(".sheet-content");
  * Affichage de la fiche course
  */
 
-function afficherFiche(course,index,total){
+function afficherFiche(course, index, total) {
 
     sheet.innerHTML = `
 
     <div class="course-card">
 
         <div class="course-counter">
-
-            ${index+1} / ${total}
-
+            ${index + 1} / ${total}
         </div>
 
         <div class="course-title">
-
             ${course.depart} ➜ ${course.arrivee}
-
         </div>
 
         <div class="course-price">
-
             ${course.gain}
-
         </div>
 
         <div class="course-info">
 
-            <span>🕐 ${course.heure}</span>
+            <span>🕒 ${course.heure}</span>
 
             <div class="separator"></div>
 
-            <span>${course.type}</span>
+            <span>📦 ${course.type}</span>
 
         </div>
 
@@ -48,7 +42,7 @@ function afficherFiche(course,index,total){
 
         <div class="locations">
 
-            <div class="location collect">
+            <div class="location">
 
                 <div class="location-title">
 
@@ -60,13 +54,13 @@ function afficherFiche(course,index,total){
 
                 <div class="location-city">
 
-                    ${course.marchand}
+                    ${course.depart}
 
                 </div>
 
             </div>
 
-            <div class="location delivery">
+            <div class="location">
 
                 <div class="location-title">
 
@@ -98,16 +92,31 @@ function afficherFiche(course,index,total){
 
     `;
 
-    // --------------------------
-    // Ouverture Glide
-    // --------------------------
+    //-------------------------------------------------
+    // Ouverture de la fiche Glide
+    //-------------------------------------------------
 
     document
         .getElementById("btnFiche")
-        .addEventListener("click",()=>{
+        .addEventListener("click", () => {
 
-        ouvrirFiche(course);
+            ouvrirFiche(course);
 
-    });
+        });
+
+}
+
+/**
+ * Ouverture Glide
+ * (provisoire)
+ */
+
+function ouvrirFiche(course){
+
+    console.log("Order ID :", course.id);
+
+    // Sprint 2 :
+    // ouverture automatique de la fiche Glide
+    // avec course.id
 
 }
