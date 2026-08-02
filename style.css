@@ -1,10 +1,10 @@
 /* ==========================================================
    HOP COURSES MAP
-   STYLE.CSS V2
-   PARTIE 1 / 3
+   STYLE.CSS V3
+   PARTIE 1 / 4
    ========================================================== */
 
-   :root{
+:root{
 
     --blue:#003366;
     --orange:#F28C18;
@@ -15,13 +15,13 @@
     --text:#1D1D1F;
     --text-light:#6B7280;
 
-    --sheet-width:84%;
-    --sheet-max-width:385px;
+    --sheet-width:74%;
+    --sheet-max-width:300px;
 
-    --radius:28px;
+    --radius:24px;
 
     --shadow:
-        0 12px 30px rgba(0,0,0,.16);
+        0 10px 24px rgba(0,0,0,.16);
 
 }
 
@@ -29,7 +29,6 @@
 
     margin:0;
     padding:0;
-
     box-sizing:border-box;
 
 }
@@ -54,7 +53,7 @@ body{
 }
 
 /* ==========================================================
-   MAP
+   CARTE
    ========================================================== */
 
 #map{
@@ -76,7 +75,6 @@ body{
     position:fixed;
 
     left:50%;
-
     bottom:10px;
 
     transform:translateX(-50%);
@@ -95,19 +93,37 @@ body{
 
     box-shadow:var(--shadow);
 
-    transition:
+    touch-action:pan-y;
 
-        transform .25s ease,
+    user-select:none;
 
-        box-shadow .25s ease;
+    -webkit-user-select:none;
+
+    animation:sheetAppear .30s ease;
 
 }
 
-.bottom-sheet:hover{
+@keyframes sheetAppear{
 
-    box-shadow:
+    from{
 
-        0 18px 40px rgba(0,0,0,.18);
+        transform:
+            translateX(-50%)
+            translateY(18px);
+
+        opacity:0;
+
+    }
+
+    to{
+
+        transform:
+            translateX(-50%)
+            translateY(0);
+
+        opacity:1;
+
+    }
 
 }
 
@@ -119,9 +135,9 @@ body{
 
     padding:
 
-        10px
-        18px
-        16px;
+        6px
+        12px
+        10px;
 
 }
 
@@ -135,19 +151,19 @@ body{
 
     display:block;
 
-    width:44px;
+    width:38px;
 
-    height:5px;
-
-    border-radius:999px;
-
-    background:#D8D8D8;
+    height:4px;
 
     margin:
 
-        10px
+        8px
         auto
-        8px;
+        6px;
+
+    border-radius:999px;
+
+    background:#D7D7D7;
 
 }
 
@@ -157,19 +173,24 @@ body{
 
 .loading{
 
-    padding:45px 15px;
+    padding:35px 12px;
 
     text-align:center;
 
-    color:#888;
+    font-size:13px;
 
-    font-size:15px;
+    color:#999;
 
 }
-
 /* ==========================================================
-   COURSE CARD
+   STYLE.CSS V3
+   PARTIE 2 / 4
+   CONTENU DE LA FICHE
    ========================================================== */
+
+/* ===============================
+   Carte
+================================ */
 
 .course-card{
 
@@ -181,36 +202,6 @@ body{
 
 }
 
-/* ==========================================================
-   RESPONSIVE
-   ========================================================== */
-
-@media(max-width:430px){
-
-    .bottom-sheet{
-
-        width:86%;
-
-        bottom:8px;
-
-    }
-
-}
-
-@media(min-width:700px){
-
-    .bottom-sheet{
-
-        max-width:420px;
-
-    }
-
-}/* ==========================================================
-   STYLE.CSS V2
-   PARTIE 2 / 3
-   CONTENU DE LA FICHE
-   ========================================================== */
-
 /* ===============================
    Compteur
 ================================ */
@@ -221,11 +212,13 @@ body{
 
     color:var(--text-light);
 
-    font-size:12px;
+    font-size:10px;
 
     font-weight:600;
 
-    margin-bottom:6px;
+    margin-bottom:3px;
+
+    letter-spacing:.4px;
 
 }
 
@@ -239,13 +232,13 @@ body{
 
     color:var(--blue);
 
-    font-size:20px;
+    font-size:15px;
 
     font-weight:700;
 
-    line-height:1.25;
+    line-height:1.15;
 
-    margin-bottom:10px;
+    margin-bottom:5px;
 
 }
 
@@ -259,16 +252,16 @@ body{
 
     color:var(--orange);
 
-    font-size:26px;
+    font-size:18px;
 
     font-weight:800;
 
-    margin-bottom:10px;
+    margin-bottom:5px;
 
 }
 
 /* ===============================
-   Heure + Type
+   Heure / Type
 ================================ */
 
 .course-info{
@@ -279,13 +272,13 @@ body{
 
     align-items:center;
 
-    gap:10px;
-
-    font-size:13px;
+    gap:6px;
 
     color:var(--text-light);
 
-    margin-bottom:10px;
+    font-size:11px;
+
+    margin-bottom:6px;
 
 }
 
@@ -293,9 +286,9 @@ body{
 
     width:1px;
 
-    height:14px;
+    height:10px;
 
-    background:#E5E7EB;
+    background:#E6E6E6;
 
 }
 
@@ -311,12 +304,17 @@ body{
 
     background:#ECECEC;
 
-    margin:10px 0;
+    margin:6px 0;
 
 }
+/* ==========================================================
+   STYLE.CSS V3
+   PARTIE 3 / 4
+   COLLECTE / LIVRAISON
+   ========================================================== */
 
 /* ===============================
-   Collecte / Livraison
+   Bloc Collecte / Livraison
 ================================ */
 
 .locations{
@@ -325,7 +323,9 @@ body{
 
     justify-content:space-between;
 
-    gap:18px;
+    gap:10px;
+
+    margin-top:2px;
 
 }
 
@@ -335,33 +335,43 @@ body{
 
 }
 
+/* ===============================
+   Titre
+================================ */
+
 .location-title{
 
     display:flex;
 
     align-items:center;
 
-    gap:8px;
+    gap:5px;
 
     color:var(--blue);
 
-    font-size:14px;
+    font-size:11px;
 
     font-weight:700;
 
-    margin-bottom:6px;
+    margin-bottom:2px;
 
 }
+
+/* ===============================
+   Ville
+================================ */
 
 .location-city{
 
     color:var(--text);
 
-    font-size:15px;
+    font-size:12px;
 
-    line-height:1.35;
+    line-height:1.15;
 
-    font-weight:500;
+    font-weight:600;
+
+    word-break:break-word;
 
 }
 
@@ -371,9 +381,9 @@ body{
 
 .dot{
 
-    width:12px;
+    width:9px;
 
-    height:12px;
+    height:9px;
 
     border-radius:50%;
 
@@ -393,93 +403,9 @@ body{
 
 }
 
-/* ===============================
-   Bouton
-================================ */
-
-.btn{
-
-    width:100%;
-
-    height:42px;
-
-    margin-top:14px;
-
-    border:none;
-
-    border-radius:14px;
-
-    background:var(--orange);
-
-    color:#FFF;
-
-    font-size:15px;
-
-    font-weight:700;
-
-    cursor:pointer;
-
-    transition:
-
-        background .25s,
-
-        transform .15s;
-
-}
-
-.btn:hover{
-
-    background:#DF7F12;
-
-}
-
-.btn:active{
-
-    transform:scale(.98);
-
-}/* ==========================================================
-   STYLE.CSS V2
-   PARTIE 3 / 3
-   FINITIONS PREMIUM
+/* ==========================================================
+   LEAFLET
    ========================================================== */
-
-/* ===============================
-   Animations
-================================ */
-
-.bottom-sheet{
-
-    animation:sheetAppear .35s ease;
-
-}
-
-@keyframes sheetAppear{
-
-    from{
-
-        transform:
-            translateX(-50%)
-            translateY(20px);
-
-        opacity:0;
-
-    }
-
-    to{
-
-        transform:
-            translateX(-50%)
-            translateY(0);
-
-        opacity:1;
-
-    }
-
-}
-
-/* ===============================
-   Leaflet
-================================ */
 
 .leaflet-container{
 
@@ -491,35 +417,31 @@ body{
 
     border:none !important;
 
-    border-radius:16px !important;
+    border-radius:14px !important;
 
     overflow:hidden;
 
     box-shadow:
 
-        0 8px 18px rgba(0,0,0,.18);
+        0 6px 14px rgba(0,0,0,.18);
 
 }
 
 .leaflet-control-zoom a{
 
-    width:38px !important;
+    width:34px !important;
 
-    height:38px !important;
+    height:34px !important;
 
-    line-height:38px !important;
+    line-height:34px !important;
 
-    font-size:20px !important;
+    font-size:18px !important;
 
 }
 
-/* ===============================
-   Popups
-================================ */
-
 .leaflet-popup-content{
 
-    font-size:13px;
+    font-size:12px;
 
     font-weight:600;
 
@@ -531,71 +453,120 @@ body{
 
 }
 
-/* ===============================
-   Swipe (préparation)
-================================ */
+/* ==========================================================
+   INTERACTIONS
+   ========================================================== */
 
-.bottom-sheet{
+.course-card{
 
-    touch-action:pan-y;
+    cursor:pointer;
 
-    user-select:none;
+    transition:
 
-    -webkit-user-select:none;
+        transform .15s ease,
+
+        opacity .15s ease;
 
 }
 
-/* ===============================
-   Boutons
-================================ */
+.course-card:active{
+
+    transform:scale(.985);
+
+}
 
 button{
 
     -webkit-tap-highlight-color:transparent;
 
 }
+/* ==========================================================
+   STYLE.CSS V3
+   PARTIE 4 / 4
+   RESPONSIVE + FINITIONS
+   ========================================================== */
 
 /* ===============================
    Mobile
 ================================ */
 
-@media(max-width:430px){
+@media (max-width:430px){
+
+    :root{
+
+        --sheet-width:72%;
+        --sheet-max-width:290px;
+
+    }
+
+    .sheet-content{
+
+        padding:6px 10px 8px;
+
+    }
+
+    .course-counter{
+
+        font-size:9px;
+
+    }
 
     .course-title{
 
-        font-size:18px;
+        font-size:14px;
+
+        margin-bottom:4px;
 
     }
 
     .course-price{
 
-        font-size:24px;
+        font-size:17px;
+
+        margin-bottom:4px;
 
     }
 
     .course-info{
 
-        font-size:12px;
+        font-size:10px;
+
+        gap:5px;
+
+        margin-bottom:5px;
+
+    }
+
+    .divider{
+
+        margin:5px 0;
+
+    }
+
+    .locations{
+
+        gap:8px;
 
     }
 
     .location-title{
 
-        font-size:13px;
+        font-size:10px;
+
+        margin-bottom:2px;
 
     }
 
     .location-city{
 
-        font-size:14px;
+        font-size:11px;
 
     }
 
-    .btn{
+    .dot{
 
-        height:40px;
-
-        font-size:14px;
+        width:8px;
+        height:8px;
 
     }
 
@@ -605,31 +576,94 @@ button{
    Très petits écrans
 ================================ */
 
-@media(max-width:360px){
+@media (max-width:360px){
 
-    .bottom-sheet{
+    :root{
 
-        width:90%;
+        --sheet-width:74%;
+        --sheet-max-width:270px;
 
     }
 
     .sheet-content{
 
-        padding:10px 14px 14px;
+        padding:5px 9px 7px;
 
     }
 
     .course-title{
 
-        font-size:17px;
+        font-size:13px;
 
     }
 
     .course-price{
 
-        font-size:22px;
+        font-size:16px;
 
     }
+
+    .course-info{
+
+        font-size:9px;
+
+    }
+
+    .location-title{
+
+        font-size:9px;
+
+    }
+
+    .location-city{
+
+        font-size:10px;
+
+    }
+
+}
+
+/* ===============================
+   Desktop
+================================ */
+
+@media (min-width:700px){
+
+    :root{
+
+        --sheet-width:320px;
+
+    }
+
+}
+
+/* ==========================================================
+   Finition
+   ========================================================== */
+
+.bottom-sheet{
+
+    backdrop-filter:blur(8px);
+
+}
+
+.course-card{
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease;
+
+}
+
+.course-card:hover{
+
+    transform:translateY(-1px);
+
+}
+
+.course-card:active{
+
+    transform:scale(.985);
 
 }
 
