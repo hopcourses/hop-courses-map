@@ -284,7 +284,7 @@ function recentrerCarte(course){
 
             paddingBottomRight:[40,240],
 
-            maxZoom:13
+            maxZoom:5
 
         }
 
