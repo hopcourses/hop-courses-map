@@ -1,8 +1,9 @@
 // ==========================================================
 // Hop Courses Map
 // map.js
-// Sprint 1.3
+// Sprint 2.7
 // Gestion de la carte Leaflet
+// Partie 1 / 3
 // ==========================================================
 
 let map = null;
@@ -94,6 +95,7 @@ function afficherCarte(course){
             <div style="
 
                 width:18px;
+
                 height:18px;
 
                 border-radius:50%;
@@ -127,6 +129,7 @@ function afficherCarte(course){
             <div style="
 
                 width:18px;
+
                 height:18px;
 
                 border-radius:50%;
@@ -145,8 +148,7 @@ function afficherCarte(course){
 
         iconAnchor:[9,9]
 
-    });
-        //--------------------------------------------------------
+    });    //--------------------------------------------------------
     // Création des marqueurs
     //--------------------------------------------------------
 
@@ -175,7 +177,7 @@ function afficherCarte(course){
     ).addTo(map);
 
     //--------------------------------------------------------
-    // Itinéraire (provisoire)
+    // Itinéraire
     //--------------------------------------------------------
 
     itineraire = L.polyline(
@@ -205,7 +207,7 @@ function afficherCarte(course){
     ).addTo(map);
 
     //--------------------------------------------------------
-    // Cadrage intelligent
+    // Cadrage
     //--------------------------------------------------------
 
     const bounds = itineraire.getBounds();
@@ -224,36 +226,47 @@ function afficherCarte(course){
 
             paddingBottomRight:[40,240],
 
-            maxZoom:13
+            maxZoom:12.5
 
         }
 
     );
-        //--------------------------------------------------------
-    // Préparation Sprint 1.5
-    // Itinéraire OSRM
+
+    //--------------------------------------------------------
+    // Décalage vers le haut
     //--------------------------------------------------------
 
-    /*
-        La ligne droite sera remplacée
-        par un véritable itinéraire routier.
+    setTimeout(()=>{
 
-        La fonction afficherCarte(course)
-        restera inchangée.
-    */
+        map.panBy(
 
-}
+            [-40,90],
 
-/**
+            {
+
+                animate:true,
+
+                duration:0.5
+
+            }
+
+        );
+
+    },60);
+
+}/**
  * ----------------------------------------------------------
  * Centre la carte sur la course courante
- * (utilisé après le swipe)
  * ----------------------------------------------------------
  */
 
 function recentrerCarte(course){
 
-    if(!itineraire) return;
+    if(!itineraire){
+
+        return;
+
+    }
 
     const bounds = itineraire.getBounds();
 
@@ -276,5 +289,27 @@ function recentrerCarte(course){
         }
 
     );
+
+    //--------------------------------------------------------
+    // Décalage vers le haut
+    //--------------------------------------------------------
+
+    setTimeout(()=>{
+
+        map.panBy(
+
+            [-40,90],
+
+            {
+
+                animate:true,
+
+                duration:0.5
+
+            }
+
+        );
+
+    },60);
 
 }

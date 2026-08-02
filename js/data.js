@@ -100,12 +100,23 @@ function convertirDate(dateTexte){
  * Chargement du fichier JSON
  * ----------------------------------------------------------
  */
+const params = new URLSearchParams(window.location.search);
 
+const emailCotransporteur = params.get("email");
 async function chargerCourses(){
 
     try{
 
-        const response = await fetch("data.json");
+        const response = await fetch("https://hook.eu1.make.com/yv0nwycbklv4vemum09yyrzg8rpkpjeh",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body: JSON.stringify({
+                MAIL: emailCotransporteur
+            })
+        });
+        console.log(response.url);
 
         if(!response.ok){
 
@@ -113,9 +124,11 @@ async function chargerCourses(){
 
         }
 
-        courses = await response.json();
+        const jsonTexte = await response.text();
 
-        console.log("✅ Courses chargées :", courses);
+courses = JSON.parse(jsonTexte);
+
+        console.log(courses[0].date);
 
         initialiserApplication();
 

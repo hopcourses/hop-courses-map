@@ -1,34 +1,43 @@
 /* ==========================================================
-   HOP COURSES MAP
-   STYLE.CSS V3
-   PARTIE 1 / 4
-   ========================================================== */
+   Hop Courses Map
+   style.css
+   Sprint 2.5.1
+   Partie 1 / 3
+========================================================== */
+
+/* ==========================================================
+   VARIABLES
+========================================================== */
 
 :root{
 
     --blue:#003366;
     --orange:#F28C18;
-    --orange-marker:#FF9100;
 
     --background:#F5F7FA;
 
-    --text:#1D1D1F;
-    --text-light:#6B7280;
+    --white:#FFFFFF;
 
-    --sheet-width:74%;
-    --sheet-max-width:300px;
+    --text:#243447;
+
+    --text-light:#8A94A6;
+
+    --shadow:0 12px 32px rgba(0,0,0,.15);
 
     --radius:24px;
 
-    --shadow:
-        0 10px 24px rgba(0,0,0,.16);
-
 }
+
+/* ==========================================================
+   RESET
+========================================================== */
 
 *{
 
     margin:0;
+
     padding:0;
+
     box-sizing:border-box;
 
 }
@@ -37,6 +46,7 @@ html,
 body{
 
     width:100%;
+
     height:100%;
 
     overflow:hidden;
@@ -44,17 +54,18 @@ body{
     background:var(--background);
 
     font-family:
-
         Inter,
         "SF Pro Display",
-        Arial,
+        Roboto,
         sans-serif;
+
+    color:var(--text);
 
 }
 
 /* ==========================================================
    CARTE
-   ========================================================== */
+========================================================== */
 
 #map{
 
@@ -62,135 +73,53 @@ body{
 
     inset:0;
 
+    width:100%;
+
+    height:100%;
+
     z-index:1;
 
 }
 
 /* ==========================================================
    BOTTOM SHEET
-   ========================================================== */
+========================================================== */
 
 .bottom-sheet{
 
-    position:fixed;
+    position:absolute;
 
     left:50%;
+
     bottom:10px;
 
     transform:translateX(-50%);
 
-    width:var(--sheet-width);
+    width:94%;
 
-    max-width:var(--sheet-max-width);
-
-    background:#FFF;
-
-    border-radius:var(--radius);
-
-    overflow:hidden;
+    max-width:430px;
 
     z-index:999;
 
-    box-shadow:var(--shadow);
-
-    touch-action:pan-y;
-
-    user-select:none;
-
-    -webkit-user-select:none;
-
-    animation:sheetAppear .30s ease;
-
 }
-
-@keyframes sheetAppear{
-
-    from{
-
-        transform:
-            translateX(-50%)
-            translateY(18px);
-
-        opacity:0;
-
-    }
-
-    to{
-
-        transform:
-            translateX(-50%)
-            translateY(0);
-
-        opacity:1;
-
-    }
-
-}
-
-/* ==========================================================
-   CONTENU
-   ========================================================== */
 
 .sheet-content{
 
-    padding:
+    background:var(--white);
 
-        6px
-        12px
-        10px;
+    border-radius:24px;
 
-}
+    box-shadow:var(--shadow);
 
-/* ==========================================================
-   POIGNÉE
-   ========================================================== */
+    padding:18px 20px 18px;
 
-.bottom-sheet::before{
-
-    content:"";
-
-    display:block;
-
-    width:38px;
-
-    height:4px;
-
-    margin:
-
-        8px
-        auto
-        6px;
-
-    border-radius:999px;
-
-    background:#D7D7D7;
+    overflow:hidden;
 
 }
 
 /* ==========================================================
-   CHARGEMENT
-   ========================================================== */
-
-.loading{
-
-    padding:35px 12px;
-
-    text-align:center;
-
-    font-size:13px;
-
-    color:#999;
-
-}
-/* ==========================================================
-   STYLE.CSS V3
-   PARTIE 2 / 4
-   CONTENU DE LA FICHE
-   ========================================================== */
-
-/* ===============================
-   Carte
-================================ */
+   CARTE COURSE
+========================================================== */
 
 .course-card{
 
@@ -198,73 +127,100 @@ body{
 
     flex-direction:column;
 
-    width:100%;
-
 }
 
-/* ===============================
-   Compteur
-================================ */
+/* ==========================================================
+   COMPTEUR
+========================================================== */
 
 .course-counter{
 
     text-align:center;
 
-    color:var(--text-light);
-
-    font-size:10px;
+    font-size:13px;
 
     font-weight:600;
 
-    margin-bottom:3px;
+    color:var(--text-light);
 
-    letter-spacing:.4px;
+    margin-bottom:10px;
+
+}
+/* ==========================================================
+   ENTÊTE
+========================================================== */
+
+.course-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-end;
+
+    margin-bottom:18px;
 
 }
 
-/* ===============================
-   Titre
-================================ */
-
-.course-title{
-
-    text-align:center;
-
-    color:var(--blue);
-
-    font-size:15px;
-
-    font-weight:700;
-
-    line-height:1.15;
-
-    margin-bottom:5px;
-
-}
-
-/* ===============================
-   Prix
-================================ */
-
-.course-price{
-
-    text-align:center;
-
-    color:var(--orange);
+.course-date{
 
     font-size:18px;
 
-    font-weight:800;
+    font-weight:700;
 
-    margin-bottom:5px;
+    color:var(--blue);
+
+    line-height:1.2;
 
 }
 
-/* ===============================
-   Heure / Type
-================================ */
+.course-price{
 
-.course-info{
+    font-size:30px;
+
+    font-weight:800;
+
+    color:var(--orange);
+
+    line-height:1;
+
+    white-space:nowrap;
+
+}
+
+/* ==========================================================
+   LIGNES D'INFORMATIONS
+========================================================== */
+
+.course-row{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    min-height:30px;
+
+    margin-bottom:12px;
+
+}
+
+.course-row:last-child{
+
+    margin-bottom:0;
+
+}
+
+/* ==========================================================
+   ICÔNES
+========================================================== */
+
+.course-icon{
+
+    width:24px;
+
+    min-width:24px;
 
     display:flex;
 
@@ -272,140 +228,79 @@ body{
 
     align-items:center;
 
-    gap:6px;
-
-    color:var(--text-light);
-
-    font-size:11px;
-
-    margin-bottom:6px;
+    font-size:18px;
 
 }
 
-.separator{
-
-    width:1px;
-
-    height:10px;
-
-    background:#E6E6E6;
-
-}
-
-/* ===============================
-   Séparateur
-================================ */
-
-.divider{
-
-    width:100%;
-
-    height:1px;
-
-    background:#ECECEC;
-
-    margin:6px 0;
-
-}
 /* ==========================================================
-   STYLE.CSS V3
-   PARTIE 3 / 4
-   COLLECTE / LIVRAISON
-   ========================================================== */
+   TEXTE
+========================================================== */
 
-/* ===============================
-   Bloc Collecte / Livraison
-================================ */
-
-.locations{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    gap:10px;
-
-    margin-top:2px;
-
-}
-
-.location{
+.course-text{
 
     flex:1;
 
-}
+    font-size:16px;
 
-/* ===============================
-   Titre
-================================ */
-
-.location-title{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:5px;
-
-    color:var(--blue);
-
-    font-size:11px;
-
-    font-weight:700;
-
-    margin-bottom:2px;
-
-}
-
-/* ===============================
-   Ville
-================================ */
-
-.location-city{
+    font-weight:500;
 
     color:var(--text);
 
-    font-size:12px;
-
-    line-height:1.15;
-
-    font-weight:600;
-
-    word-break:break-word;
+    line-height:1.35;
 
 }
 
-/* ===============================
-   Pastilles
-================================ */
+/* ==========================================================
+   PASTILLES
+========================================================== */
 
 .dot{
 
-    width:9px;
+    width:14px;
 
-    height:9px;
+    height:14px;
+
+    min-width:14px;
 
     border-radius:50%;
 
-    flex-shrink:0;
+    margin-left:5px;
 
 }
 
 .dot.collect{
 
-    background:#003366;
+    background:var(--blue);
 
 }
 
 .dot.delivery{
 
-    background:#FF9100;
+    background:var(--orange);
+
+}
+/* ==========================================================
+   HOVER
+========================================================== */
+
+.course-card{
+
+    cursor:pointer;
+
+    transition:
+        transform .20s ease,
+        box-shadow .20s ease;
 
 }
 
+.course-card:active{
+
+    transform:scale(.985);
+
+}
 /* ==========================================================
    LEAFLET
-   ========================================================== */
+========================================================== */
 
 .leaflet-container{
 
@@ -417,31 +312,33 @@ body{
 
     border:none !important;
 
-    border-radius:14px !important;
+    border-radius:16px !important;
 
     overflow:hidden;
 
-    box-shadow:
-
-        0 6px 14px rgba(0,0,0,.18);
+    box-shadow:0 8px 18px rgba(0,0,0,.18);
 
 }
 
 .leaflet-control-zoom a{
 
-    width:34px !important;
+    width:40px !important;
 
-    height:34px !important;
+    height:40px !important;
 
-    line-height:34px !important;
+    line-height:40px !important;
 
-    font-size:18px !important;
+    font-size:20px !important;
 
 }
 
+/* ==========================================================
+   POPUPS
+========================================================== */
+
 .leaflet-popup-content{
 
-    font-size:12px;
+    font-size:13px;
 
     font-weight:600;
 
@@ -454,219 +351,260 @@ body{
 }
 
 /* ==========================================================
-   INTERACTIONS
-   ========================================================== */
+   LOADING
+========================================================== */
 
-.course-card{
+.loading{
 
-    cursor:pointer;
+    padding:35px 15px;
 
-    transition:
+    text-align:center;
 
-        transform .15s ease,
+    color:#7A8599;
 
-        opacity .15s ease;
-
-}
-
-.course-card:active{
-
-    transform:scale(.985);
+    font-size:15px;
 
 }
 
-button{
-
-    -webkit-tap-highlight-color:transparent;
-
-}
 /* ==========================================================
-   STYLE.CSS V3
-   PARTIE 4 / 4
-   RESPONSIVE + FINITIONS
-   ========================================================== */
+   MOBILE
+========================================================== */
 
-/* ===============================
-   Mobile
-================================ */
+@media(max-width:430px){
 
-@media (max-width:430px){
+    .bottom-sheet{
 
-    :root{
+        width:95%;
 
-        --sheet-width:72%;
-        --sheet-max-width:290px;
+        bottom:8px;
 
     }
 
     .sheet-content{
 
-        padding:6px 10px 8px;
+        padding:18px;
 
     }
 
-    .course-counter{
-
-        font-size:9px;
-
-    }
-
-    .course-title{
-
-        font-size:14px;
-
-        margin-bottom:4px;
-
-    }
-
-    .course-price{
+    .course-date{
 
         font-size:17px;
 
-        margin-bottom:4px;
+    }
+
+    .course-price{
+
+        font-size:28px;
 
     }
 
-    .course-info{
+    .course-text{
 
-        font-size:10px;
-
-        gap:5px;
-
-        margin-bottom:5px;
-
-    }
-
-    .divider{
-
-        margin:5px 0;
-
-    }
-
-    .locations{
-
-        gap:8px;
-
-    }
-
-    .location-title{
-
-        font-size:10px;
-
-        margin-bottom:2px;
-
-    }
-
-    .location-city{
-
-        font-size:11px;
-
-    }
-
-    .dot{
-
-        width:8px;
-        height:8px;
+        font-size:15px;
 
     }
 
 }
 
-/* ===============================
-   Très petits écrans
-================================ */
+@media(max-width:360px){
 
-@media (max-width:360px){
+    .bottom-sheet{
 
-    :root{
-
-        --sheet-width:74%;
-        --sheet-max-width:270px;
+        width:97%;
 
     }
 
     .sheet-content{
 
-        padding:5px 9px 7px;
+        padding:16px;
 
     }
 
-    .course-title{
-
-        font-size:13px;
-
-    }
-
-    .course-price{
+    .course-date{
 
         font-size:16px;
 
     }
 
-    .course-info{
+    .course-price{
 
-        font-size:9px;
-
-    }
-
-    .location-title{
-
-        font-size:9px;
+        font-size:25px;
 
     }
 
-    .location-city{
+    .course-text{
 
-        font-size:10px;
-
-    }
-
-}
-
-/* ===============================
-   Desktop
-================================ */
-
-@media (min-width:700px){
-
-    :root{
-
-        --sheet-width:320px;
+        font-size:14px;
 
     }
 
 }
 
 /* ==========================================================
-   Finition
-   ========================================================== */
-
-.bottom-sheet{
-
-    backdrop-filter:blur(8px);
-
-}
+   ANIMATIONS
+========================================================== */
 
 .course-card{
 
-    transition:
-        transform .18s ease,
-        box-shadow .18s ease;
+    animation:fadeCard .22s ease;
 
 }
 
-.course-card:hover{
+@keyframes fadeCard{
 
-    transform:translateY(-1px);
+    from{
 
-}
+        opacity:0;
 
-.course-card:active{
+        transform:translateY(8px);
 
-    transform:scale(.985);
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
 
 }
 
 /* ==========================================================
-   FIN
-   ========================================================== */
+   BOTTOM SHEET
+   Préparation Sprint 2.6
+========================================================== */
+
+.sheet-slide-left{
+
+    animation:slideLeft .28s ease both;
+
+}
+
+.sheet-slide-right{
+
+    animation:slideRight .28s ease both;
+
+}
+
+@keyframes slideLeft{
+
+    from{
+
+        opacity:0;
+
+        transform:translateX(24px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateX(0);
+
+    }
+
+}
+
+@keyframes slideRight{
+
+    from{
+
+        opacity:0;
+
+        transform:translateX(-24px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateX(0);
+
+    }
+
+}
+/* ==========================================================
+   Sprint 2.6.3
+   Animations améliorées
+========================================================== */
+
+.sheet-exit-left{
+
+    animation:sheetExitLeft .28s cubic-bezier(.22,.61,.36,1) forwards;
+
+}
+
+.sheet-exit-right{
+
+    animation:sheetExitRight .28s cubic-bezier(.22,.61,.36,1) forwards;
+
+}
+
+.sheet-enter{
+
+    animation:sheetEnter .30s cubic-bezier(.22,.61,.36,1);
+
+}
+
+@keyframes sheetExitLeft{
+
+    from{
+
+        opacity:1;
+
+        transform:translateX(0) scale(1);
+
+    }
+
+    to{
+
+        opacity:0;
+
+        transform:translateX(-160px) scale(.96);
+
+    }
+
+}
+
+@keyframes sheetExitRight{
+
+    from{
+
+        opacity:1;
+
+        transform:translateX(0) scale(1);
+
+    }
+
+    to{
+
+        opacity:0;
+
+        transform:translateX(160px) scale(.96);
+
+    }
+
+}
+
+@keyframes sheetEnter{
+
+    from{
+
+        opacity:0;
+
+        transform:translateX(90px) scale(.96);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateX(0) scale(1);
+
+    }
+
+}

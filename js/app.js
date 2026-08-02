@@ -1,17 +1,27 @@
 // ==========================================================
 // Hop Courses Map
 // app.js
-// Sprint 2.1
+// Sprint 2.6.2
 // Gestion de l'application
+// Partie 1 / 2
 // ==========================================================
 
 let indexCourse = 0;
 
-/**
- * ----------------------------------------------------------
- * Affiche la course courante
- * ----------------------------------------------------------
- */
+let animationEnCours = false;
+// ==========================================================
+// Paramètres de l'URL
+// ==========================================================
+
+const params = new URLSearchParams(window.location.search);
+
+const emailCotransporteur = params.get("email");
+
+console.log("Email reçu :", emailCotransporteur);
+
+/* ==========================================================
+   Affichage de la course courante
+========================================================== */
 
 function afficherCourseCourante(){
 
@@ -37,62 +47,144 @@ function afficherCourseCourante(){
 
 }
 
-/**
- * ----------------------------------------------------------
- * Course suivante
- * ----------------------------------------------------------
- */
+/* ==========================================================
+   Animation de changement de fiche
+========================================================== */
+
+function changerCourseAnimee(direction){
+
+    if(animationEnCours){
+
+        return;
+
+    }
+
+    const ancienneCarte = document.getElementById("courseCard");
+
+    if(!ancienneCarte){
+
+        return;
+
+    }
+
+    animationEnCours = true;
+
+    //--------------------------------------------------------
+    // Animation de sortie
+    //--------------------------------------------------------
+
+    if(direction==="left"){
+
+        ancienneCarte.classList.add("sheet-exit-left");
+
+    }
+
+    else{
+
+        ancienneCarte.classList.add("sheet-exit-right");
+
+    }
+
+    //--------------------------------------------------------
+    // Changement de mission
+    //--------------------------------------------------------
+
+    setTimeout(()=>{
+
+        if(direction==="left"){
+
+            indexCourse++;
+
+        }
+
+        else{
+
+            indexCourse--;
+
+        }
+
+        afficherCourseCourante();
+
+        //----------------------------------------------------
+        // Animation d'entrée
+        //----------------------------------------------------
+
+        const nouvelleCarte = document.getElementById("courseCard");
+
+        if(nouvelleCarte){
+
+            nouvelleCarte.classList.add("sheet-enter");
+
+            setTimeout(()=>{
+
+                nouvelleCarte.classList.remove("sheet-enter");
+
+                animationEnCours=false;
+
+            },260);
+
+        }
+
+    },220);
+
+}
+
+/* ==========================================================
+   Course suivante
+========================================================== */
 
 function courseSuivante(){
 
-    if(indexCourse >= courses.length - 1){
+    if(animationEnCours){
 
         return;
 
     }
 
-    indexCourse++;
+    if(indexCourse >= courses.length-1){
 
-    afficherCourseCourante();
+        return;
+
+    }
+
+    changerCourseAnimee("left");
 
 }
 
-/**
- * ----------------------------------------------------------
- * Course précédente
- * ----------------------------------------------------------
- */
+/* ==========================================================
+   Course précédente
+========================================================== */
 
 function coursePrecedente(){
 
-    if(indexCourse <= 0){
+    if(animationEnCours){
 
         return;
 
     }
 
-    indexCourse--;
+    if(indexCourse<=0){
 
-    afficherCourseCourante();
+        return;
+
+    }
+
+    changerCourseAnimee("right");
 
 }
-
-/**
- * ----------------------------------------------------------
- * Variables Swipe
- * ----------------------------------------------------------
- */
+/* ==========================================================
+   Variables Swipe
+========================================================== */
 
 let startX = 0;
 
 let currentX = 0;
 
 let isSwiping = false;
-/**
- * ----------------------------------------------------------
- * Initialisation du Swipe
- * ----------------------------------------------------------
- */
+
+/* ==========================================================
+   Initialisation du Swipe
+========================================================== */
 
 function initialiserSwipe(){
 
@@ -138,7 +230,6 @@ function initialiserSwipe(){
 
         isSwiping = false;
 
-        // Swipe vers la gauche
         if(distance < -60){
 
             courseSuivante();
@@ -147,7 +238,6 @@ function initialiserSwipe(){
 
         }
 
-        // Swipe vers la droite
         if(distance > 60){
 
             coursePrecedente();
@@ -160,11 +250,9 @@ function initialiserSwipe(){
 
 }
 
-/**
- * ----------------------------------------------------------
- * Initialisation
- * ----------------------------------------------------------
- */
+/* ==========================================================
+   Initialisation
+========================================================== */
 
 function initialiserApplication(){
 
@@ -176,11 +264,9 @@ function initialiserApplication(){
 
 }
 
-/**
- * ----------------------------------------------------------
- * Chargement des données
- * ----------------------------------------------------------
- */
+/* ==========================================================
+   Chargement des données
+========================================================== */
 
 document.addEventListener("DOMContentLoaded",()=>{
 
