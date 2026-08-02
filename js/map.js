@@ -1,17 +1,20 @@
 // ==========================================================
 // Hop Courses Map
 // map.js
+// Sprint 1.3
 // Gestion de la carte Leaflet
 // ==========================================================
 
-let map;
+let map = null;
 
 let markerCollecte = null;
 let markerLivraison = null;
 let itineraire = null;
 
 /**
+ * ----------------------------------------------------------
  * Initialisation de la carte
+ * ----------------------------------------------------------
  */
 
 function initialiserCarte(){
@@ -20,7 +23,11 @@ function initialiserCarte(){
 
         zoomControl:true,
 
-        attributionControl:false
+        attributionControl:false,
+
+        zoomSnap:0.25,
+
+        zoomDelta:0.25
 
     });
 
@@ -39,7 +46,9 @@ function initialiserCarte(){
 }
 
 /**
+ * ----------------------------------------------------------
  * Affichage d'une course
+ * ----------------------------------------------------------
  */
 
 function afficherCarte(course){
@@ -50,9 +59,9 @@ function afficherCarte(course){
 
     }
 
-    // -----------------------------
-    // Suppression anciens éléments
-    // -----------------------------
+    //--------------------------------------------------------
+    // Nettoyage
+    //--------------------------------------------------------
 
     if(markerCollecte){
 
@@ -72,9 +81,9 @@ function afficherCarte(course){
 
     }
 
-    // -----------------------------
+    //--------------------------------------------------------
     // Icône collecte
-    // -----------------------------
+    //--------------------------------------------------------
 
     const iconeCollecte = L.divIcon({
 
@@ -82,21 +91,20 @@ function afficherCarte(course){
 
         html:`
 
-        <div style="
+            <div style="
 
-            width:18px;
+                width:18px;
+                height:18px;
 
-            height:18px;
+                border-radius:50%;
 
-            border-radius:50%;
+                background:#003366;
 
-            background:#003366;
+                border:3px solid white;
 
-            border:3px solid white;
+                box-shadow:0 3px 10px rgba(0,0,0,.25);
 
-            box-shadow:0 0 10px rgba(0,0,0,.25);
-
-        "></div>
+            "></div>
 
         `,
 
@@ -106,9 +114,9 @@ function afficherCarte(course){
 
     });
 
-    // -----------------------------
+    //--------------------------------------------------------
     // Icône livraison
-    // -----------------------------
+    //--------------------------------------------------------
 
     const iconeLivraison = L.divIcon({
 
@@ -116,21 +124,20 @@ function afficherCarte(course){
 
         html:`
 
-        <div style="
+            <div style="
 
-            width:18px;
+                width:18px;
+                height:18px;
 
-            height:18px;
+                border-radius:50%;
 
-            border-radius:50%;
+                background:#FF9100;
 
-            background:#FF9100;
+                border:3px solid white;
 
-            border:3px solid white;
+                box-shadow:0 3px 10px rgba(0,0,0,.25);
 
-            box-shadow:0 0 10px rgba(0,0,0,.25);
-
-        "></div>
+            "></div>
 
         `,
 
@@ -139,6 +146,9 @@ function afficherCarte(course){
         iconAnchor:[9,9]
 
     });
+        //--------------------------------------------------------
+    // Création des marqueurs
+    //--------------------------------------------------------
 
     markerCollecte = L.marker(
 
@@ -164,9 +174,9 @@ function afficherCarte(course){
 
     ).addTo(map);
 
-    // -----------------------------
-    // Ligne
-    // -----------------------------
+    //--------------------------------------------------------
+    // Itinéraire (provisoire)
+    //--------------------------------------------------------
 
     itineraire = L.polyline(
 
@@ -184,23 +194,84 @@ function afficherCarte(course){
 
             weight:5,
 
-            opacity:.9
+            opacity:.90,
+
+            lineJoin:"round",
+
+            lineCap:"round"
 
         }
 
     ).addTo(map);
 
-    // -----------------------------
-    // Zoom automatique
-    // -----------------------------
+    //--------------------------------------------------------
+    // Cadrage intelligent
+    //--------------------------------------------------------
+
+    const bounds = itineraire.getBounds();
 
     map.fitBounds(
 
-        itineraire.getBounds(),
+        bounds,
 
         {
 
-            padding:[70,70]
+            animate:true,
+
+            duration:0.8,
+
+            paddingTopLeft:[40,40],
+
+            paddingBottomRight:[40,240],
+
+            maxZoom:13
+
+        }
+
+    );
+        //--------------------------------------------------------
+    // Préparation Sprint 1.5
+    // Itinéraire OSRM
+    //--------------------------------------------------------
+
+    /*
+        La ligne droite sera remplacée
+        par un véritable itinéraire routier.
+
+        La fonction afficherCarte(course)
+        restera inchangée.
+    */
+
+}
+
+/**
+ * ----------------------------------------------------------
+ * Centre la carte sur la course courante
+ * (utilisé après le swipe)
+ * ----------------------------------------------------------
+ */
+
+function recentrerCarte(course){
+
+    if(!itineraire) return;
+
+    const bounds = itineraire.getBounds();
+
+    map.fitBounds(
+
+        bounds,
+
+        {
+
+            animate:true,
+
+            duration:0.6,
+
+            paddingTopLeft:[40,40],
+
+            paddingBottomRight:[40,240],
+
+            maxZoom:13
 
         }
 
