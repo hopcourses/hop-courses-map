@@ -146,7 +146,7 @@ function afficherCarte(course){
                     text-align: center;
                     transform: scaleX(-1);
                     filter: drop-shadow(-2px 3px 4px rgba(0,0,0,0.4));
-                ">🏃‍♂️</div>
+                ">🚗</div>
             </div>
         `,
         iconSize: [60, 50],
