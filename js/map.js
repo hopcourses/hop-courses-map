@@ -102,26 +102,20 @@ function afficherCarte(course){
         iconAnchor: [9, 9]
     });
 
-    // Icône du livreur : Macaron bonhomme
+    // Icône du livreur : Bonhomme orienté vers la droite
     const iconeLivreur = L.divIcon({
         className: "",
         html: `
             <div style="
-                width: 32px;
-                height: 32px;
-                border-radius: 50%;
-                background: #003366;
-                border: 2px solid #00D26A;
-                box-shadow: 0 3px 10px rgba(0,0,0,0.3);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: white;
-                font-size: 18px;
-            ">🚶</div>
+                font-size: 26px;
+                line-height: 26px;
+                text-align: center;
+                transform: scaleX(-1); /* Miroir horizontal : tourne l'émoji vers la droite */
+                filter: drop-shadow(-2px 3px 4px rgba(0,0,0,0.4));
+            ">🚶‍♂️</div>
         `,
-        iconSize: [32, 32],
-        iconAnchor: [16, 16]
+        iconSize: [30, 30],
+        iconAnchor: [15, 15]
     });
 
     //--------------------------------------------------------
@@ -143,7 +137,7 @@ function afficherCarte(course){
     //--------------------------------------------------------
     // Animation du livreur (Point A -> Point B)
     //--------------------------------------------------------
-    const dureeAnimation = 8000; // 8000ms = 8 secondes de trajet
+    const dureeAnimation = 4000; // 5000ms = 5 secondes de trajet
 
     if (L.Marker.movingMarker) {
         markerLivreur = L.Marker.movingMarker(
