@@ -74,8 +74,8 @@ function afficherCarte(course){
         className: "",
         html: `
             <div style="
-                width: 18px;
-                height: 18px;
+                width: 14px;
+                height: 14px;
                 border-radius: 50%;
                 background: #003366;
                 border: 3px solid white;
@@ -90,8 +90,8 @@ function afficherCarte(course){
         className: "",
         html: `
             <div style="
-                width: 18px;
-                height: 18px;
+                width: 14px;
+                height: 14px;
                 border-radius: 50%;
                 background: #FF9100;
                 border: 3px solid white;
@@ -103,20 +103,11 @@ function afficherCarte(course){
     });
 
     // Icône du livreur en mouvement (bleue bordée de vert fluo)
-    const iconeLivreur = L.divIcon({
-        className: "",
-        html: `
-            <div style="
-                width: 20px;
-                height: 20px;
-                border-radius: 50%;
-                background: #003366;
-                border: 3px solid #00D26A;
-                box-shadow: 0 0 12px rgba(0,210,106,0.9);
-            "></div>
-        `,
-        iconSize: [20, 20],
-        iconAnchor: [10, 10]
+    // Icône du livreur : Image personnalisée
+    const iconeLivreur = L.icon({
+        iconUrl: 'https://res.cloudinary.com/glide/image/fetch/f_auto,w_1275,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FxqQ16xCqkIi7N1s0OrNF%2Fpub%2FqFABcpiY8kEHBveCNllr.gif', // URL de ton icône voiture
+        iconSize: [32, 32],   // Taille de l'image [largeur, hauteur]
+        iconAnchor: [16, 16]  // Point d'ancrage au centre de l'icône
     });
 
     //--------------------------------------------------------
