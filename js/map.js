@@ -10,7 +10,7 @@ let map = null;
 let markerCollecte = null;
 let markerLivraison = null;
 let itineraire = null;
-let markerLivreur = null; // Marqueur animé pour le livreur
+let markerLivreur = null;
 
 /**
  * ----------------------------------------------------------
@@ -32,10 +32,6 @@ function initialiserCarte(){
         }
     ).addTo(map);
 
-    //--------------------------------------------------------
-    // Fix : le composant custom Glide (iframe) redimensionne
-    // parfois le conteneur #map après le premier rendu.
-    //--------------------------------------------------------
     const conteneurCarte = document.getElementById("map");
 
     if (conteneurCarte && window.ResizeObserver) {
@@ -59,23 +55,21 @@ function afficherCarte(course){
         initialiserCarte();
     }
 
-    //--------------------------------------------------------
     // Nettoyage des anciens éléments
-    //--------------------------------------------------------
     if(markerCollecte){ map.removeLayer(markerCollecte); }
     if(markerLivraison){ map.removeLayer(markerLivraison); }
     if(itineraire){ map.removeLayer(itineraire); }
     if(markerLivreur){ map.removeLayer(markerLivreur); }
 
-    //--------------------------------------------------------
-    // Icônes
-    //--------------------------------------------------------
+    // ------------------------------------------------------
+    // 1. Icône Collecte (Inchangée : Point bleu)
+    // ------------------------------------------------------
     const iconeCollecte = L.divIcon({
         className: "",
         html: `
             <div style="
-                width: 14px;
-                height: 14px;
+                width: 18px;
+                height: 18px;
                 border-radius: 50%;
                 background: #003366;
                 border: 3px solid white;
@@ -86,12 +80,15 @@ function afficherCarte(course){
         iconAnchor: [9, 9]
     });
 
+    // ------------------------------------------------------
+    // 2. Icône Livraison (Inchangée : Point orange)
+    // ------------------------------------------------------
     const iconeLivraison = L.divIcon({
         className: "",
         html: `
             <div style="
-                width: 14px;
-                height: 14px;
+                width: 18px;
+                height: 18px;
                 border-radius: 50%;
                 background: #FF9100;
                 border: 3px solid white;
@@ -102,25 +99,63 @@ function afficherCarte(course){
         iconAnchor: [9, 9]
     });
 
-    // Icône du livreur : Bonhomme orienté vers la droite
+    // ------------------------------------------------------
+    // 3. Calcul de la distance dynamique
+    // ------------------------------------------------------
+    let texteDistance = "";
+    if (map) {
+        const distMetres = map.distance(course.collecte, course.livraison);
+        const distKm = (distMetres / 1000).toFixed(1); // Ex: 3.5 km
+        texteDistance = `${distKm} km`;
+    }
+
+    // ------------------------------------------------------
+    // 4. Icône Livreur (Bonhomme vers la droite + Bulle Distance)
+    // ------------------------------------------------------
     const iconeLivreur = L.divIcon({
         className: "",
         html: `
             <div style="
-                font-size: 26px;
-                line-height: 26px;
-                text-align: center;
-                transform: scaleX(-1); /* Miroir horizontal : tourne l'émoji vers la droite */
-                filter: drop-shadow(-2px 3px 4px rgba(0,0,0,0.4));
-            ">🚶‍♂️</div>
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                pointer-events: none;
+            ">
+                <!-- Bulle de distance -->
+                <div style="
+                    background: #003366;
+                    color: white;
+                    font-size: 11px;
+                    font-weight: bold;
+                    font-family: sans-serif;
+                    padding: 2px 7px;
+                    border-radius: 10px;
+                    border: 1px solid #00D26A;
+                    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+                    white-space: nowrap;
+                    margin-bottom: 2px;
+                ">
+                    ${texteDistance}
+                </div>
+
+                <!-- Personnage vers la droite -->
+                <div style="
+                    font-size: 26px;
+                    line-height: 26px;
+                    text-align: center;
+                    transform: scaleX(-1);
+                    filter: drop-shadow(-2px 3px 4px rgba(0,0,0,0.4));
+                ">🏃‍♂️</div>
+            </div>
         `,
-        iconSize: [30, 30],
-        iconAnchor: [15, 15]
+        iconSize: [60, 50],
+        iconAnchor: [30, 42]
     });
 
-    //--------------------------------------------------------
-    // Création des marqueurs fixes et du tracé
-    //--------------------------------------------------------
+    // ------------------------------------------------------
+    // Création des marqueurs fixes et de la ligne
+    // ------------------------------------------------------
     markerCollecte = L.marker(course.collecte, { icon: iconeCollecte }).addTo(map);
     markerLivraison = L.marker(course.livraison, { icon: iconeLivraison }).addTo(map);
 
@@ -134,10 +169,10 @@ function afficherCarte(course){
         }
     ).addTo(map);
 
-    //--------------------------------------------------------
-    // Animation du livreur (Point A -> Point B)
-    //--------------------------------------------------------
-    const dureeAnimation = 4000; // 5000ms = 5 secondes de trajet
+    // ------------------------------------------------------
+    // Animation du livreur
+    // ------------------------------------------------------
+    const dureeAnimation = 8000; // 8 secondes
 
     if (L.Marker.movingMarker) {
         markerLivreur = L.Marker.movingMarker(
@@ -146,20 +181,17 @@ function afficherCarte(course){
             {
                 icon: iconeLivreur,
                 autostart: true,
-                loop: true // Recommence en boucle
+                loop: true
             }
         ).addTo(map);
     }
 
-    //--------------------------------------------------------
-    // Cadrage adapté
-    //--------------------------------------------------------
     recentrerCarte(course);
 }
 
 /**
  * ----------------------------------------------------------
- * Centre la carte sur la course courante
+ * Centre la carte sur la course
  * ----------------------------------------------------------
  */
 function recentrerCarte(course){
@@ -182,10 +214,9 @@ function recentrerCarte(course){
 }
 
 /**
- * ==========================================================
+ * ----------------------------------------------------------
  * Lecture automatique des coordonnées depuis l'URL
- * Ex: ?latA=50.799&lngA=2.693&latB=50.701&lngB=2.712
- * ==========================================================
+ * ----------------------------------------------------------
  */
 function obtenirParamsURL() {
     const params = new URLSearchParams(window.location.search);
@@ -204,7 +235,6 @@ function obtenirParamsURL() {
     return null;
 }
 
-// Lancement automatique au chargement
 document.addEventListener("DOMContentLoaded", () => {
     const courseDepuisURL = obtenirParamsURL();
     
