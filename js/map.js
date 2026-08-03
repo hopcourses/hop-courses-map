@@ -102,12 +102,26 @@ function afficherCarte(course){
         iconAnchor: [9, 9]
     });
 
-    // Icône du livreur en mouvement (bleue bordée de vert fluo)
-    // Icône du livreur : Image personnalisée
-    const iconeLivreur = L.icon({
-        iconUrl: 'https://res.cloudinary.com/glide/image/fetch/f_auto,w_1275,c_limit/https%3A%2F%2Fstorage.googleapis.com%2Fglide-prod.appspot.com%2Fuploads-v2%2FxqQ16xCqkIi7N1s0OrNF%2Fpub%2FqFABcpiY8kEHBveCNllr.gif', // URL de ton icône voiture
-        iconSize: [32, 32],   // Taille de l'image [largeur, hauteur]
-        iconAnchor: [16, 16]  // Point d'ancrage au centre de l'icône
+    // Icône du livreur : Macaron bonhomme
+    const iconeLivreur = L.divIcon({
+        className: "",
+        html: `
+            <div style="
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                background: #003366;
+                border: 2px solid #00D26A;
+                box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 18px;
+            ">🚶</div>
+        `,
+        iconSize: [32, 32],
+        iconAnchor: [16, 16]
     });
 
     //--------------------------------------------------------
