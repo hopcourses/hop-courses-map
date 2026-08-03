@@ -206,9 +206,9 @@ function recentrerCarte(course){
         {
             animate: true,
             duration: 0.8,
-            paddingTopLeft: [50, 50],
-            paddingBottomRight: [50, 240],
-            maxZoom: 13.5
+            paddingTopLeft: [20, 20],
+            paddingBottomRight: [20, 20],
+            maxZoom: 16
         }
     );
 }
