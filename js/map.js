@@ -10,6 +10,7 @@ let map = null;
 let markerCollecte = null;
 let markerLivraison = null;
 let itineraire = null;
+let markerLivreur = null; // Marqueur animé pour le livreur
 
 /**
  * ----------------------------------------------------------
@@ -50,7 +51,7 @@ function initialiserCarte(){
 
 /**
  * ----------------------------------------------------------
- * Affichage d'une course
+ * Affichage et animation d'une course
  * ----------------------------------------------------------
  */
 function afficherCarte(course){
@@ -59,14 +60,15 @@ function afficherCarte(course){
     }
 
     //--------------------------------------------------------
-    // Nettoyage
+    // Nettoyage des anciens éléments
     //--------------------------------------------------------
     if(markerCollecte){ map.removeLayer(markerCollecte); }
     if(markerLivraison){ map.removeLayer(markerLivraison); }
     if(itineraire){ map.removeLayer(itineraire); }
+    if(markerLivreur){ map.removeLayer(markerLivreur); }
 
     //--------------------------------------------------------
-    // Icône collecte
+    // Icônes
     //--------------------------------------------------------
     const iconeCollecte = L.divIcon({
         className: "",
@@ -84,9 +86,6 @@ function afficherCarte(course){
         iconAnchor: [9, 9]
     });
 
-    //--------------------------------------------------------
-    // Icône livraison
-    //--------------------------------------------------------
     const iconeLivraison = L.divIcon({
         className: "",
         html: `
@@ -103,28 +102,58 @@ function afficherCarte(course){
         iconAnchor: [9, 9]
     });
 
+    // Icône du livreur en mouvement (bleue bordée de vert fluo)
+    const iconeLivreur = L.divIcon({
+        className: "",
+        html: `
+            <div style="
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                background: #003366;
+                border: 3px solid #00D26A;
+                box-shadow: 0 0 12px rgba(0,210,106,0.9);
+            "></div>
+        `,
+        iconSize: [20, 20],
+        iconAnchor: [10, 10]
+    });
+
     //--------------------------------------------------------
-    // Création des marqueurs
+    // Création des marqueurs fixes et du tracé
     //--------------------------------------------------------
     markerCollecte = L.marker(course.collecte, { icon: iconeCollecte }).addTo(map);
     markerLivraison = L.marker(course.livraison, { icon: iconeLivraison }).addTo(map);
 
-    //--------------------------------------------------------
-    // Itinéraire
-    //--------------------------------------------------------
     itineraire = L.polyline(
         [course.collecte, course.livraison],
         {
             color: "#FF9100",
-            weight: 5,
-            opacity: .90,
-            lineJoin: "round",
-            lineCap: "round"
+            weight: 4,
+            opacity: .60,
+            dashArray: "8, 8"
         }
     ).addTo(map);
 
     //--------------------------------------------------------
-    // Cadrage adapté au panneau Shopopop
+    // Animation du livreur (Point A -> Point B)
+    //--------------------------------------------------------
+    const dureeAnimation = 8000; // 8000ms = 8 secondes de trajet
+
+    if (L.Marker.movingMarker) {
+        markerLivreur = L.Marker.movingMarker(
+            [course.collecte, course.livraison],
+            [dureeAnimation],
+            {
+                icon: iconeLivreur,
+                autostart: true,
+                loop: true // Recommence en boucle
+            }
+        ).addTo(map);
+    }
+
+    //--------------------------------------------------------
+    // Cadrage adapté
     //--------------------------------------------------------
     recentrerCarte(course);
 }
@@ -155,7 +184,7 @@ function recentrerCarte(course){
 
 /**
  * ==========================================================
- * NOUVEAU : Lecture automatique des coordonnées depuis l'URL
+ * Lecture automatique des coordonnées depuis l'URL
  * Ex: ?latA=50.799&lngA=2.693&latB=50.701&lngB=2.712
  * ==========================================================
  */
@@ -176,7 +205,7 @@ function obtenirParamsURL() {
     return null;
 }
 
-// Lancement automatique au chargement du composant
+// Lancement automatique au chargement
 document.addEventListener("DOMContentLoaded", () => {
     const courseDepuisURL = obtenirParamsURL();
     
