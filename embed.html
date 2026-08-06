@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Carte Hop Courses - Suivi</title>
+    <title>Hop Courses - Suivi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -42,13 +42,19 @@
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
+        // Fonction sécurisée pour nettoyer les coordonnées (gère les virgules françaises et les points)
+        function parseCoord(val) {
+            if (!val) return NaN;
+            return parseFloat(val.toString().replace(',', '.'));
+        }
+
         const params = new URLSearchParams(window.location.search);
-        const latA = parseFloat(params.get('latA'));
-        const lngA = parseFloat(params.get('lngA'));
-        const latB = parseFloat(params.get('latB'));
-        const lngB = parseFloat(params.get('lngB'));
-        const latLivreur = parseFloat(params.get('latLivreur'));
-        const lngLivreur = parseFloat(params.get('lngLivreur'));
+        const latA = parseCoord(params.get('latA'));
+        const lngA = parseCoord(params.get('lngA'));
+        const latB = parseCoord(params.get('latB'));
+        const lngB = parseCoord(params.get('lngB'));
+        const latLivreur = parseCoord(params.get('latLivreur'));
+        const lngLivreur = parseCoord(params.get('lngLivreur'));
 
         const map = L.map('map').setView([48.8566, 2.3522], 13);
 
@@ -59,7 +65,7 @@
 
         const boundsMarkers = [];
 
-        // Point A (Collecte - #003366)
+        // 1. Point A (Départ / Collecte - #003366)
         if (!isNaN(latA) && latA !== 0 && !isNaN(lngA) && lngA !== 0) {
             const iconA = L.divIcon({
                 className: 'custom-pin',
@@ -67,11 +73,11 @@
                 iconSize: [24, 24],
                 iconAnchor: [12, 12]
             });
-            L.marker([latA, lngA], { icon: iconA }).addTo(map).bindPopup("<b>Collecte</b>");
+            L.marker([latA, lngA], { icon: iconA }).addTo(map).bindPopup("<b>Adresse de départ (Collecte)</b>");
             boundsMarkers.push([latA, lngA]);
         }
 
-        // Point B (Destination - #FF9100)
+        // 2. Point B (Destination / Arrivée - #FF9100)
         if (!isNaN(latB) && latB !== 0 && !isNaN(lngB) && lngB !== 0) {
             const iconB = L.divIcon({
                 className: 'custom-pin',
@@ -79,23 +85,23 @@
                 iconSize: [24, 24],
                 iconAnchor: [12, 12]
             });
-            L.marker([latB, lngB], { icon: iconB }).addTo(map).bindPopup("<b>Destination</b>");
+            L.marker([latB, lngB], { icon: iconB }).addTo(map).bindPopup("<b>Adresse de destination</b>");
             boundsMarkers.push([latB, lngB]);
         }
 
-        // Position du Livreur
+        // 3. Position du Livreur ("Votre position")
         if (!isNaN(latLivreur) && latLivreur !== 0 && !isNaN(lngLivreur) && lngLivreur !== 0) {
             const iconLivreur = L.divIcon({
                 className: '',
-                html: '<div class="driver-badge">🚗 Livreur</div>',
-                iconSize: [70, 26],
-                iconAnchor: [35, 13]
+                html: '<div class="driver-badge">🚗 Votre position</div>',
+                iconSize: [110, 26],
+                iconAnchor: [55, 13]
             });
-            L.marker([latLivreur, lngLivreur], { icon: iconLivreur }).addTo(map).bindPopup("<b>Position du livreur</b>");
+            L.marker([latLivreur, lngLivreur], { icon: iconLivreur }).addTo(map).bindPopup("<b>Votre position actuelle</b>");
             boundsMarkers.push([latLivreur, lngLivreur]);
         }
 
-        // Ligne et Panonceau de Distance entre A et B
+        // 4. Ligne pointillée et Panonceau de Distance entre A et B
         if (!isNaN(latA) && latA !== 0 && !isNaN(latB) && latB !== 0) {
             const latlngA = L.latLng(latA, lngA);
             const latlngB = L.latLng(latB, lngB);
@@ -119,6 +125,7 @@
             L.marker(midpoint, { icon: distanceIcon }).addTo(map);
         }
 
+        // 5. Ajustement automatique du zoom centré sur la course
         if (boundsMarkers.length > 0) {
             const group = L.featureGroup(boundsMarkers.map(coords => L.marker(coords)));
             map.fitBounds(group.getBounds().pad(0.3));
