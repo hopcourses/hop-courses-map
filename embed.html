@@ -31,7 +31,7 @@
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Fonction pour gérer les virgules ou les points
+        // Fonction pour gérer les virgules ou les points dans les coordonnées
         function parseCoord(val) {
             if (!val) return NaN;
             return parseFloat(val.toString().replace(',', '.'));
@@ -54,7 +54,7 @@
 
         const boundsMarkers = [];
 
-        // 1. Point A (Départ - Taille normale 18px)
+        // 1. Point A (Départ - Bleu foncé - FIXE)
         if (!isNaN(latA) && latA !== 0 && !isNaN(lngA) && lngA !== 0) {
             const iconA = L.divIcon({
                 className: 'custom-pin',
@@ -66,7 +66,7 @@
             boundsMarkers.push([latA, lngA]);
         }
 
-        // 2. Point B (Destination - Taille normale 18px)
+        // 2. Point B (Destination - Orange - FIXE)
         if (!isNaN(latB) && latB !== 0 && !isNaN(lngB) && lngB !== 0) {
             const iconB = L.divIcon({
                 className: 'custom-pin',
@@ -78,7 +78,8 @@
             boundsMarkers.push([latB, lngB]);
         }
 
-        // 3. Position du Livreur (Point Vert - Réduit à 12px)
+        // 3. Position du Livreur (Vert - Plus petit - Totalement FIXE)
+        // Ce point ne bougera jamais de la position GPS envoyée dans l'URL
         if (!isNaN(latLivreur) && latLivreur !== 0 && !isNaN(lngLivreur) && lngLivreur !== 0) {
             const iconLivreur = L.divIcon({
                 className: 'custom-pin',
@@ -90,11 +91,12 @@
             boundsMarkers.push([latLivreur, lngLivreur]);
         }
 
-        // 4. Ligne, Panonceau et Animation si A et B existent
+        // 4. Ligne, Panonceau et Animation du curseur (indépendant du livreur)
         if (!isNaN(latA) && latA !== 0 && !isNaN(latB) && latB !== 0) {
             const latlngA = L.latLng(latA, lngA);
             const latlngB = L.latLng(latB, lngB);
 
+            // Tracé en pointillés
             L.polyline([latlngA, latlngB], { 
                 color: '#003366', 
                 weight: 4, 
@@ -102,6 +104,7 @@
                 dashArray: '6, 6' 
             }).addTo(map);
 
+            // Panonceau de distance
             const distanceKm = (latlngA.distanceTo(latlngB) / 1000).toFixed(1);
             const midpoint = [(latA + latB) / 2, (lngA + lngB) / 2];
 
@@ -113,7 +116,8 @@
             });
             L.marker(midpoint, { icon: distanceIcon }).addTo(map);
 
-            // 5. Curseur noir animé (Réduit à 10px)
+            // 5. Curseur d'animation (Noir - Indépendant du livreur)
+            // C'est uniquement ce petit point noir qui se déplace de A vers B
             const iconAnim = L.divIcon({
                 className: 'custom-pin',
                 html: '<div style="background-color: #000000; width: 10px; height: 10px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5);"></div>',
@@ -137,6 +141,7 @@
             requestAnimationFrame(moveCursor);
         }
 
+        // 6. Cadrage automatique de la carte
         if (boundsMarkers.length > 0) {
             const group = L.featureGroup(boundsMarkers.map(coords => L.marker(coords)));
             map.fitBounds(group.getBounds().pad(0.3));
