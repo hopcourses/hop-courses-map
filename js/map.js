@@ -1,7 +1,7 @@
 // ==========================================================
 // Hop Courses Map
 // map.js
-// Sprint 2.7.1
+// Sprint 2.7.1 (Modifié avec Position Livreur)
 // Gestion de la carte Leaflet
 // ==========================================================
 
@@ -11,6 +11,7 @@ let markerCollecte = null;
 let markerLivraison = null;
 let itineraire = null;
 let markerLivreur = null;
+let markerPositionLivreur = null; // Nouveau marqueur pour la position fixe du livreur
 
 /**
  * ----------------------------------------------------------
@@ -50,7 +51,7 @@ function initialiserCarte(){
  * Affichage et animation d'une course
  * ----------------------------------------------------------
  */
-function afficherCarte(course){
+function afficherCarte(donneesCourse){
     if(!map){
         initialiserCarte();
     }
@@ -60,9 +61,10 @@ function afficherCarte(course){
     if(markerLivraison){ map.removeLayer(markerLivraison); }
     if(itineraire){ map.removeLayer(itineraire); }
     if(markerLivreur){ map.removeLayer(markerLivreur); }
+    if(markerPositionLivreur){ map.removeLayer(markerPositionLivreur); }
 
     // ------------------------------------------------------
-    // 1. Icône Collecte (Inchangée : Point bleu)
+    // 1. Icône Collecte (Point bleu)
     // ------------------------------------------------------
     const iconeCollecte = L.divIcon({
         className: "",
@@ -81,7 +83,7 @@ function afficherCarte(course){
     });
 
     // ------------------------------------------------------
-    // 2. Icône Livraison (Inchangée : Point orange)
+    // 2. Icône Livraison (Point orange)
     // ------------------------------------------------------
     const iconeLivraison = L.divIcon({
         className: "",
@@ -100,19 +102,19 @@ function afficherCarte(course){
     });
 
     // ------------------------------------------------------
-    // 3. Calcul de la distance dynamique
+    // 3. Calcul de la distance dynamique (Collecte -> Livraison)
     // ------------------------------------------------------
     let texteDistance = "";
     if (map) {
-        const distMetres = map.distance(course.collecte, course.livraison);
-        const distKm = (distMetres / 1000).toFixed(1); // Ex: 3.5 km
+        const distMetres = map.distance(donneesCourse.collecte, donneesCourse.livraison);
+        const distKm = (distMetres / 1000).toFixed(1);
         texteDistance = `${distKm} km`;
     }
 
     // ------------------------------------------------------
-    // 4. Icône Livreur (Bonhomme vers la droite + Bulle Distance)
+    // 4. Icône Livreur Animé (Trajet A -> B)
     // ------------------------------------------------------
-    const iconeLivreur = L.divIcon({
+    const iconeLivreurAnime = L.divIcon({
         className: "",
         html: `
             <div style="
@@ -122,7 +124,6 @@ function afficherCarte(course){
                 justify-content: center;
                 pointer-events: none;
             ">
-                <!-- Bulle de distance -->
                 <div style="
                     background: #003366;
                     color: white;
@@ -138,8 +139,6 @@ function afficherCarte(course){
                 ">
                     ${texteDistance}
                 </div>
-
-                <!-- Personnage vers la droite -->
                 <div style="
                     font-size: 26px;
                     line-height: 26px;
@@ -154,13 +153,53 @@ function afficherCarte(course){
     });
 
     // ------------------------------------------------------
+    // 5. Icône Position Actuelle du Livreur (Voiture)
+    // ------------------------------------------------------
+    const iconePositionLivreur = L.divIcon({
+        className: "",
+        html: `
+            <div style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                pointer-events: none;
+            ">
+                <div style="
+                    background: #00D26A;
+                    color: white;
+                    font-size: 10px;
+                    font-weight: bold;
+                    font-family: sans-serif;
+                    padding: 2px 6px;
+                    border-radius: 8px;
+                    border: 1px solid white;
+                    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+                    white-space: nowrap;
+                    margin-bottom: 2px;
+                ">
+                    Votre position actuelle
+                </div>
+                <div style="
+                    font-size: 24px;
+                    line-height: 24px;
+                    text-align: center;
+                    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+                ">🚗</div>
+            </div>
+        `,
+        iconSize: [70, 45],
+        iconAnchor: [35, 38]
+    });
+
+    // ------------------------------------------------------
     // Création des marqueurs fixes et de la ligne
     // ------------------------------------------------------
-    markerCollecte = L.marker(course.collecte, { icon: iconeCollecte }).addTo(map);
-    markerLivraison = L.marker(course.livraison, { icon: iconeLivraison }).addTo(map);
+    markerCollecte = L.marker(donneesCourse.collecte, { icon: iconeCollecte }).addTo(map);
+    markerLivraison = L.marker(donneesCourse.livraison, { icon: iconeLivraison }).addTo(map);
 
     itineraire = L.polyline(
-        [course.collecte, course.livraison],
+        [donneesCourse.collecte, donneesCourse.livraison],
         {
             color: "#FF9100",
             weight: 4,
@@ -169,45 +208,56 @@ function afficherCarte(course){
         }
     ).addTo(map);
 
+    // Ajout du marqueur de position actuelle du livreur si les coordonnées existent
+    if (donneesCourse.positionLivreur) {
+        markerPositionLivreur = L.marker(donneesCourse.positionLivreur, { icon: iconePositionLivreur }).addTo(map);
+    }
+
     // ------------------------------------------------------
-    // Animation du livreur
+    // Animation du livreur sur le trajet
     // ------------------------------------------------------
-    const dureeAnimation = 8000; // 8 secondes
+    const dureeAnimation = 8000;
 
     if (L.Marker.movingMarker) {
         markerLivreur = L.Marker.movingMarker(
-            [course.collecte, course.livraison],
+            [donneesCourse.collecte, donneesCourse.livraison],
             [dureeAnimation],
             {
-                icon: iconeLivreur,
+                icon: iconeLivreurAnime,
                 autostart: true,
                 loop: true
             }
         ).addTo(map);
     }
 
-    recentrerCarte(course);
+    recentrerCarte(donneesCourse);
 }
 
 /**
  * ----------------------------------------------------------
- * Centre la carte sur la course
+ * Centre la carte pour inclure la course ET le livreur
  * ----------------------------------------------------------
  */
-function recentrerCarte(course){
+function recentrerCarte(donneesCourse){
     if(!itineraire){ return; }
 
     map.invalidateSize({ animate: false });
 
-    const bounds = itineraire.getBounds();
+    // On récupère les limites de l'itinéraire (A et B)
+    const bounds = L.latLngBounds([donneesCourse.collecte, donneesCourse.livraison]);
+
+    // Si on a aussi la position du livreur, on élargit les limites de la carte pour l'inclure
+    if (donneesCourse.positionLivreur) {
+        bounds.extend(donneesCourse.positionLivreur);
+    }
 
     map.fitBounds(
         bounds,
         {
             animate: true,
             duration: 0.8,
-            paddingTopLeft: [20, 20],
-            paddingBottomRight: [20, 20],
+            paddingTopLeft: [30, 30],
+            paddingBottomRight: [30, 30],
             maxZoom: 16
         }
     );
@@ -225,11 +275,15 @@ function obtenirParamsURL() {
     const lngA = parseFloat(params.get('lngA'));
     const latB = parseFloat(params.get('latB'));
     const lngB = parseFloat(params.get('lngB'));
+    
+    const latLivreur = parseFloat(params.get('latLivreur'));
+    const lngLivreur = parseFloat(params.get('lngLivreur'));
 
     if (!isNaN(latA) && !isNaN(lngA) && !isNaN(latB) && !isNaN(lngB)) {
         return {
             collecte: [latA, lngA],
-            livraison: [latB, lngB]
+            livraison: [latB, lngB],
+            positionLivreur: (!isNaN(latLivreur) && !isNaN(lngLivreur)) ? [latLivreur, lngLivreur] : null
         };
     }
     return null;
