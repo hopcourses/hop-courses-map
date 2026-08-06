@@ -21,18 +21,6 @@
             text-align: center;
             white-space: nowrap;
         }
-        .driver-badge {
-            background-color: #10B981;
-            color: white;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 12px;
-            border: 2px solid white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-            text-align: center;
-            white-space: nowrap;
-        }
     </style>
 </head>
 <body>
@@ -42,7 +30,6 @@
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Fonction sécurisée pour nettoyer les coordonnées (gère les virgules françaises et les points)
         function parseCoord(val) {
             if (!val) return NaN;
             return parseFloat(val.toString().replace(',', '.'));
@@ -53,8 +40,6 @@
         const lngA = parseCoord(params.get('lngA'));
         const latB = parseCoord(params.get('latB'));
         const lngB = parseCoord(params.get('lngB'));
-        const latLivreur = parseCoord(params.get('latLivreur'));
-        const lngLivreur = parseCoord(params.get('lngLivreur'));
 
         const map = L.map('map').setView([48.8566, 2.3522], 13);
 
@@ -89,19 +74,7 @@
             boundsMarkers.push([latB, lngB]);
         }
 
-        // 3. Position du Livreur ("Votre position")
-        if (!isNaN(latLivreur) && latLivreur !== 0 && !isNaN(lngLivreur) && lngLivreur !== 0) {
-            const iconLivreur = L.divIcon({
-                className: '',
-                html: '<div class="driver-badge">🚗 Votre position</div>',
-                iconSize: [110, 26],
-                iconAnchor: [55, 13]
-            });
-            L.marker([latLivreur, lngLivreur], { icon: iconLivreur }).addTo(map).bindPopup("<b>Votre position actuelle</b>");
-            boundsMarkers.push([latLivreur, lngLivreur]);
-        }
-
-        // 4. Ligne pointillée et Panonceau de Distance entre A et B
+        // 3. Ligne pointillée et Panonceau de Distance entre A et B
         if (!isNaN(latA) && latA !== 0 && !isNaN(latB) && latB !== 0) {
             const latlngA = L.latLng(latA, lngA);
             const latlngB = L.latLng(latB, lngB);
@@ -123,6 +96,32 @@
                 iconAnchor: [35, 12]
             });
             L.marker(midpoint, { icon: distanceIcon }).addTo(map);
+
+            // 4. Curseur Livreur Animé (Style Uber Eats - Point vert #10B981)
+            const iconLivreur = L.divIcon({
+                className: 'custom-pin',
+                html: '<div style="background-color: #10B981; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.4); animation: pulse 1.5s infinite;"></div>',
+                iconSize: [26, 26],
+                iconAnchor: [13, 13]
+            });
+
+            const driverMarker = L.marker([latA, lngA], { icon: iconLivreur }).addTo(map);
+            driverMarker.bindPopup("<b>Votre position actuelle</b>");
+            boundsMarkers.push([latA, lngA]);
+
+            // Animation fluide du déplacement de A vers B en boucle
+            let progress = 0;
+            function moveDriver() {
+                progress += 0.002; // Vitesse de déplacement (plus c'est bas, plus c'est lent)
+                if (progress > 1) progress = 0;
+
+                const currentLat = latA + (latB - latA) * progress;
+                const currentLng = lngA + (lngB - lngA) * progress;
+                
+                driverMarker.setLatLng([currentLat, currentLng]);
+                requestAnimationFrame(moveDriver);
+            }
+            requestAnimationFrame(moveDriver);
         }
 
         // 5. Ajustement automatique du zoom centré sur la course
