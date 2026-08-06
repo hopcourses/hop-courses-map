@@ -79,7 +79,6 @@
         }
 
         // 3. Position du Livreur (Vert - Plus petit - Totalement FIXE)
-        // Ce point ne bougera jamais de la position GPS envoyée dans l'URL
         if (!isNaN(latLivreur) && latLivreur !== 0 && !isNaN(lngLivreur) && lngLivreur !== 0) {
             const iconLivreur = L.divIcon({
                 className: 'custom-pin',
@@ -91,7 +90,7 @@
             boundsMarkers.push([latLivreur, lngLivreur]);
         }
 
-        // 4. Ligne, Panonceau et Animation du curseur (indépendant du livreur)
+        // 4. Ligne, Panonceau et Animation du curseur
         if (!isNaN(latA) && latA !== 0 && !isNaN(latB) && latB !== 0) {
             const latlngA = L.latLng(latA, lngA);
             const latlngB = L.latLng(latB, lngB);
@@ -116,13 +115,15 @@
             });
             L.marker(midpoint, { icon: distanceIcon }).addTo(map);
 
-            // 5. Curseur d'animation (Noir - Indépendant du livreur)
-            // C'est uniquement ce petit point noir qui se déplace de A vers B
+            // 5. Curseur d'animation (Épingle noire en SVG calquée sur ta capture)
             const iconAnim = L.divIcon({
                 className: 'custom-pin',
-                html: '<div style="background-color: #000000; width: 10px; height: 10px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.5);"></div>',
-                iconSize: [14, 14],
-                iconAnchor: [7, 7]
+                html: `<svg width="16" height="22" viewBox="0 0 16 22" xmlns="http://www.w3.org/2000/svg">
+                           <circle cx="8" cy="8" r="6" fill="transparent" stroke="black" stroke-width="2.5"/>
+                           <line x1="8" y1="14" x2="8" y2="22" stroke="black" stroke-width="2.5"/>
+                       </svg>`,
+                iconSize: [16, 22],
+                iconAnchor: [8, 22] // Le point d'ancrage est exactement au bout de la tige
             });
             
             const animatedMarker = L.marker([latA, lngA], { icon: iconAnim }).addTo(map);
