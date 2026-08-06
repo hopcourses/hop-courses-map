@@ -1,5 +1,5 @@
 // ==========================================================
-// Hop Courses Map
+// Hop Courses Map 
 // map.js
 // Sprint 2.7.1 (Modifié avec Position Livreur)
 // Gestion de la carte Leaflet
