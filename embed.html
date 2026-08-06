@@ -42,7 +42,6 @@
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // 1. Récupération des paramètres URL envoyés par Glide
         const params = new URLSearchParams(window.location.search);
         const latA = parseFloat(params.get('latA'));
         const lngA = parseFloat(params.get('lngA'));
@@ -51,7 +50,6 @@
         const latLivreur = parseFloat(params.get('latLivreur'));
         const lngLivreur = parseFloat(params.get('lngLivreur'));
 
-        // 2. Initialisation de la carte centrée par défaut sur la France
         const map = L.map('map').setView([48.8566, 2.3522], 13);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -61,8 +59,8 @@
 
         const boundsMarkers = [];
 
-        // 3. Point A (Collecte - #003366)
-        if (!isNaN(latA) && !isNaN(lngA)) {
+        // Point A (Collecte - #003366)
+        if (!isNaN(latA) && latA !== 0 && !isNaN(lngA) && lngA !== 0) {
             const iconA = L.divIcon({
                 className: 'custom-pin',
                 html: '<div style="background-color: #003366; width: 18px; height: 18px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>',
@@ -73,8 +71,8 @@
             boundsMarkers.push([latA, lngA]);
         }
 
-        // 4. Point B (Destination - #FF9100)
-        if (!isNaN(latB) && !isNaN(lngB)) {
+        // Point B (Destination - #FF9100)
+        if (!isNaN(latB) && latB !== 0 && !isNaN(lngB) && lngB !== 0) {
             const iconB = L.divIcon({
                 className: 'custom-pin',
                 html: '<div style="background-color: #FF9100; width: 18px; height: 18px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>',
@@ -85,8 +83,8 @@
             boundsMarkers.push([latB, lngB]);
         }
 
-        // 5. Position du Livreur (Ajouté en plus proprement)
-        if (!isNaN(latLivreur) && !isNaN(lngLivreur)) {
+        // Position du Livreur
+        if (!isNaN(latLivreur) && latLivreur !== 0 && !isNaN(lngLivreur) && lngLivreur !== 0) {
             const iconLivreur = L.divIcon({
                 className: '',
                 html: '<div class="driver-badge">🚗 Livreur</div>',
@@ -97,12 +95,11 @@
             boundsMarkers.push([latLivreur, lngLivreur]);
         }
 
-        // 6. Ligne et Panonceau de Distance entre A et B
-        if (!isNaN(latA) && !isNaN(lngA) && !isNaN(latB) && !isNaN(lngB)) {
+        // Ligne et Panonceau de Distance entre A et B
+        if (!isNaN(latA) && latA !== 0 && !isNaN(latB) && latB !== 0) {
             const latlngA = L.latLng(latA, lngA);
             const latlngB = L.latLng(latB, lngB);
 
-            // Tracé de la ligne
             L.polyline([latlngA, latlngB], { 
                 color: '#003366', 
                 weight: 4, 
@@ -110,11 +107,9 @@
                 dashArray: '6, 6' 
             }).addTo(map);
 
-            // Calcul de la distance
             const distanceKm = (latlngA.distanceTo(latlngB) / 1000).toFixed(1);
             const midpoint = [(latA + latB) / 2, (lngA + lngB) / 2];
 
-            // Panonceau de distance au milieu
             const distanceIcon = L.divIcon({
                 className: '',
                 html: `<div class="distance-badge">${distanceKm} km</div>`,
@@ -124,7 +119,6 @@
             L.marker(midpoint, { icon: distanceIcon }).addTo(map);
         }
 
-        // 7. Ajustement automatique de la vue sur l'ensemble des points valides
         if (boundsMarkers.length > 0) {
             const group = L.featureGroup(boundsMarkers.map(coords => L.marker(coords)));
             map.fitBounds(group.getBounds().pad(0.3));
