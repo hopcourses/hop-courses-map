@@ -5,7 +5,7 @@
 // Gestion de la carte Leaflet
 // ==========================================================
 
-let map = null;
+let map = null;  
 
 let markerCollecte = null;
 let markerLivraison = null;
