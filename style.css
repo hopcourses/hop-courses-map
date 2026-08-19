@@ -608,3 +608,22 @@ body{
     }
 
 }
+/* Centrage parfait du badge de distance au milieu de la ligne */
+.distance-badge-icon {
+    background-color: var(--blue);
+    color: var(--white);
+    border: 2px solid var(--white);
+    border-radius: 12px;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    box-shadow: var(--shadow);
+    
+    /* C'est ici que la magie du centrage opère */
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+}
