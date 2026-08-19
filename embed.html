@@ -90,56 +90,82 @@
             boundsMarkers.push([latLivreur, lngLivreur]);
         }
 
-        // 4. Ligne, Panonceau et Animation du curseur
+        // 4 & 5. Ligne, Panonceau et Animation (AVEC OSRM ROUTING - TRACÉ PAR LES RUES)
         if (!isNaN(latA) && latA !== 0 && !isNaN(latB) && latB !== 0) {
-            const latlngA = L.latLng(latA, lngA);
-            const latlngB = L.latLng(latB, lngB);
-
-            // Tracé en pointillés
-            L.polyline([latlngA, latlngB], { 
-                color: '#003366', 
-                weight: 4, 
-                opacity: 0.7, 
-                dashArray: '6, 6' 
-            }).addTo(map);
-
-            // Panonceau de distance
-            const distanceKm = (latlngA.distanceTo(latlngB) / 1000).toFixed(1);
-            const midpoint = [(latA + latB) / 2, (lngA + lngB) / 2];
-
-            const distanceIcon = L.divIcon({
-                className: '',
-                html: `<div class="distance-badge">${distanceKm} km</div>`,
-                iconSize: [70, 24],
-                iconAnchor: [35, 12]
-            });
-            L.marker(midpoint, { icon: distanceIcon }).addTo(map);
-
-            // 5. Curseur d'animation (Épingle noire en SVG calquée sur ta capture)
-            const iconAnim = L.divIcon({
-                className: 'custom-pin',
-                html: `<svg width="16" height="22" viewBox="0 0 16 22" xmlns="http://www.w3.org/2000/svg">
-                           <circle cx="8" cy="8" r="6" fill="transparent" stroke="black" stroke-width="2.5"/>
-                           <line x1="8" y1="14" x2="8" y2="22" stroke="black" stroke-width="2.5"/>
-                       </svg>`,
-                iconSize: [16, 22],
-                iconAnchor: [8, 22] // Le point d'ancrage est exactement au bout de la tige
-            });
             
-            const animatedMarker = L.marker([latA, lngA], { icon: iconAnim }).addTo(map);
+            // On prépare l'URL pour interroger le GPS gratuit OSRM (attention, OSRM lit Longitude puis Latitude)
+            const urlOSRM = `https://router.project-osrm.org/route/v1/driving/${lngA},${latA};${lngB},${latB}?overview=full&geometries=geojson`;
 
-            let progress = 0;
-            function moveCursor() {
-                progress += 0.002;
-                if (progress > 1) progress = 0;
+            // On lance la requête au serveur
+            fetch(urlOSRM)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.routes && data.routes.length > 0) {
+                        const route = data.routes[0];
+                        
+                        // OSRM renvoie un tableau de coordonnées [lng, lat]. On les inverse en [lat, lng] pour Leaflet.
+                        const routeCoords = route.geometry.coordinates.map(coord => [coord[1], coord[0]]);
 
-                const currentLat = latA + (latB - latA) * progress;
-                const currentLng = lngA + (lngB - lngA) * progress;
-                
-                animatedMarker.setLatLng([currentLat, currentLng]);
-                requestAnimationFrame(moveCursor);
-            }
-            requestAnimationFrame(moveCursor);
+                        // Tracé en pointillés qui suit exactement les rues
+                        L.polyline(routeCoords, { 
+                            color: '#003366', 
+                            weight: 4, 
+                            opacity: 0.7, 
+                            dashArray: '6, 6' 
+                        }).addTo(map);
+
+                        // Panonceau de distance (On utilise la VRAIE distance routière renvoyée par le GPS)
+                        const distanceKm = (route.distance / 1000).toFixed(1);
+                        
+                        // On place le badge exactement au milieu du chemin tracé (sur la route !)
+                        const midIndex = Math.floor(routeCoords.length / 2);
+                        const distanceIcon = L.divIcon({
+                            className: '',
+                            html: `<div class="distance-badge">${distanceKm} km</div>`,
+                            iconSize: [70, 24],
+                            iconAnchor: [35, 12]
+                        });
+                        L.marker(routeCoords[midIndex], { icon: distanceIcon }).addTo(map);
+
+                        // Curseur d'animation (qui va suivre les courbes de la route)
+                        const iconAnim = L.divIcon({
+                            className: 'custom-pin',
+                            html: `<svg width="16" height="22" viewBox="0 0 16 22" xmlns="http://www.w3.org/2000/svg">
+                                       <circle cx="8" cy="8" r="6" fill="transparent" stroke="black" stroke-width="2.5"/>
+                                       <line x1="8" y1="14" x2="8" y2="22" stroke="black" stroke-width="2.5"/>
+                                   </svg>`,
+                            iconSize: [16, 22],
+                            iconAnchor: [8, 22]
+                        });
+                        
+                        const animatedMarker = L.marker(routeCoords[0], { icon: iconAnim }).addTo(map);
+
+                        let step = 0;
+                        function moveCursor() {
+                            step += 0.2; // VITESSE: Modifie ce chiffre pour accélérer ou ralentir l'animation (ex: 0.1 ou 0.5)
+                            let index = Math.floor(step);
+                            
+                            // On recommence au début quand on arrive à destination
+                            if (index >= routeCoords.length - 1) {
+                                step = 0;
+                                index = 0;
+                            }
+
+                            // Interpolation douce pour que l'épingle glisse parfaitement entre les virages
+                            const p1 = routeCoords[index];
+                            const p2 = routeCoords[index + 1];
+                            const fraction = step - index;
+                            
+                            const currentLat = p1[0] + (p2[0] - p1[0]) * fraction;
+                            const currentLng = p1[1] + (p2[1] - p1[1]) * fraction;
+
+                            animatedMarker.setLatLng([currentLat, currentLng]);
+                            requestAnimationFrame(moveCursor);
+                        }
+                        requestAnimationFrame(moveCursor);
+                    }
+                })
+                .catch(error => console.error("Erreur lors du tracé de la route:", error));
         }
 
        // 6. Cadrage automatique de la carte (Retour à ton code d'origine)
