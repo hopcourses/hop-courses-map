@@ -147,8 +147,8 @@
             const group = L.featureGroup(boundsMarkers.map(coords => L.marker(coords)));
             
             // On utilise ta méthode d'origine (pad), mais on limite le zoom maximum à 15
-            map.fitBounds(group.getBounds().pad(0.2), {
-                maxZoom: 25
+            map.fitBounds(group.getBounds().pad(0.1), {
+                maxZoom: 20
             });
         }
     </script>
