@@ -142,23 +142,24 @@
             requestAnimationFrame(moveCursor);
         }
 
-       // 6. Cadrage automatique et correction du filtre gris
+       // 6. Cadrage automatique et correction du décalage (VERSION STABLE)
         if (boundsMarkers.length > 0) {
             const group = L.featureGroup(boundsMarkers.map(coords => L.marker(coords)));
             
-            // ÉTAPE A : Éliminer la zone grise de façon dynamique
-            const resizeObserver = new ResizeObserver(() => {
-                map.invalidateSize(); // Force Leaflet à remplir tout l'espace disponible
-            });
-            resizeObserver.observe(document.getElementById('map'));
-
-            // ÉTAPE B : Cadrer la caméra sur les points (avec un délai un peu plus long)
-            setTimeout(() => {
+            // Fonction qui nettoie la carte et la centre parfaitement
+            function ajusterCarte() {
+                map.invalidateSize(); // Supprime le filtre gris
                 map.fitBounds(group.getBounds(), {
-                    padding: [20, 20],
-                    maxZoom: 15
+                    padding: [20, 20], // Marge respirable
+                    maxZoom: 15        // Évite le zoom extrême
                 });
-            }, 400); // On passe à 400ms pour être sûr que l'animation Glide est terminée
+            }
+
+            // 1er ajustement rapide (100ms) pour l'affichage immédiat
+            setTimeout(ajusterCarte, 100);
+
+            // 2ème ajustement (600ms) en sécurité, une fois que Glide a totalement fini de s'ouvrir
+            setTimeout(ajusterCarte, 600);
         }
     </script>
 </body>
