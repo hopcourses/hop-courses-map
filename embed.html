@@ -142,15 +142,24 @@
             requestAnimationFrame(moveCursor);
         }
 
-       // 6. Cadrage automatique de la carte (CORRIGÉ)
-if (boundsMarkers.length > 0) {
-    const group = L.featureGroup(boundsMarkers.map(coords => L.marker(coords)));
-    
-    map.fitBounds(group.getBounds(), {
-        padding: [50, 50], // Marge de 50 pixels en haut/bas/gauche/droite
-        maxZoom: 15        // 👈 La ligne magique : empêche le zoom extrême sur les courtes distances
-    });
-}
+       // 6. Cadrage automatique et correction du filtre gris
+        if (boundsMarkers.length > 0) {
+            const group = L.featureGroup(boundsMarkers.map(coords => L.marker(coords)));
+            
+            // ÉTAPE A : Éliminer la zone grise de façon dynamique
+            const resizeObserver = new ResizeObserver(() => {
+                map.invalidateSize(); // Force Leaflet à remplir tout l'espace disponible
+            });
+            resizeObserver.observe(document.getElementById('map'));
+
+            // ÉTAPE B : Cadrer la caméra sur les points (avec un délai un peu plus long)
+            setTimeout(() => {
+                map.fitBounds(group.getBounds(), {
+                    padding: [20, 20],
+                    maxZoom: 15
+                });
+            }, 400); // On passe à 400ms pour être sûr que l'animation Glide est terminée
+        }
     </script>
 </body>
 </html>
