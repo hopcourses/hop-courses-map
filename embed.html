@@ -142,11 +142,15 @@
             requestAnimationFrame(moveCursor);
         }
 
-        // 6. Cadrage automatique de la carte
-        if (boundsMarkers.length > 0) {
-            const group = L.featureGroup(boundsMarkers.map(coords => L.marker(coords)));
-            map.fitBounds(group.getBounds().pad(0.3));
-        }
+       // 6. Cadrage automatique de la carte (CORRIGÉ)
+if (boundsMarkers.length > 0) {
+    const group = L.featureGroup(boundsMarkers.map(coords => L.marker(coords)));
+    
+    map.fitBounds(group.getBounds(), {
+        padding: [50, 50], // Marge de 50 pixels en haut/bas/gauche/droite
+        maxZoom: 15        // 👈 La ligne magique : empêche le zoom extrême sur les courtes distances
+    });
+}
     </script>
 </body>
 </html>
