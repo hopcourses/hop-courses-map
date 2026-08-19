@@ -142,24 +142,14 @@
             requestAnimationFrame(moveCursor);
         }
 
-       // 6. Cadrage automatique et correction du décalage (VERSION STABLE)
+       // 6. Cadrage automatique de la carte (Retour à ton code d'origine)
         if (boundsMarkers.length > 0) {
             const group = L.featureGroup(boundsMarkers.map(coords => L.marker(coords)));
             
-            // Fonction qui nettoie la carte et la centre parfaitement
-            function ajusterCarte() {
-                map.invalidateSize(); // Supprime le filtre gris
-                map.fitBounds(group.getBounds(), {
-                    padding: [20, 20], // Marge respirable
-                    maxZoom: 15        // Évite le zoom extrême
-                });
-            }
-
-            // 1er ajustement rapide (100ms) pour l'affichage immédiat
-            setTimeout(ajusterCarte, 100);
-
-            // 2ème ajustement (600ms) en sécurité, une fois que Glide a totalement fini de s'ouvrir
-            setTimeout(ajusterCarte, 600);
+            // On utilise ta méthode d'origine (pad), mais on limite le zoom maximum à 15
+            map.fitBounds(group.getBounds().pad(0.1), {
+                maxZoom: 15
+            });
         }
     </script>
 </body>
