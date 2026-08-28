@@ -169,7 +169,7 @@ function afficherCarte(donneesCourse){
     // ------------------------------------------------------
     // Animation du livreur sur le trajet
     // ------------------------------------------------------
-    const dureeAnimation = 8000;
+    const dureeAnimation = 6000;
 
     if (L.Marker.movingMarker) {
         markerLivreur = L.Marker.movingMarker(
@@ -203,7 +203,7 @@ function recentrerCarte(donneesCourse){
         {
             animate: true,
             duration: 0.8,
-            paddingTopLeft: [30, 30],
+            paddingTopLeft: [40, 40],
             paddingBottomRight: [30, 30],
             maxZoom: 10
         }
