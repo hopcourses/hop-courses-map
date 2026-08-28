@@ -60,7 +60,7 @@
             const iconA = L.divIcon({
                 className: 'custom-pin',
                 html: '<div style="background-color: #003366; width: 18px; height: 18px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>',
-                iconSize: [24, 24],
+                iconSize: [18, 18],
                 iconAnchor: [12, 12]
             });
             L.marker([latA, lngA], { icon: iconA }).addTo(map).bindPopup("<b>Adresse de départ</b>");
@@ -72,7 +72,7 @@
             const iconB = L.divIcon({
                 className: 'custom-pin',
                 html: '<div style="background-color: #FF9100; width: 18px; height: 18px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>',
-                iconSize: [24, 24],
+                iconSize: [18, 18],
                 iconAnchor: [12, 12]
             });
             L.marker([latB, lngB], { icon: iconB }).addTo(map).bindPopup("<b>Adresse de destination</b>");
