@@ -202,10 +202,10 @@ function recentrerCarte(donneesCourse){
         bounds,
         {
             animate: true,
-            duration: 0.8,
-            paddingTopLeft: [40, 40],
-            paddingBottomRight: [30, 30],
-            maxZoom: 10
+        duration: 0.8,
+        paddingTopLeft: [15, 15],
+        paddingBottomRight: [15, 15],
+        maxZoom: 14
         }
     );
 }
