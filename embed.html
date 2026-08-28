@@ -45,11 +45,19 @@
         const latLivreur = parseCoord(params.get('latLivreur'));
         const lngLivreur = parseCoord(params.get('lngLivreur'));
 
-        const map = L.map('map').setView([48.8566, 2.3522], 13);
+        const map = L.map('map', {
+            zoomControl: true,
+            attributionControl: true,
+            zoomSnap: 0.25,
+            zoomDelta: 0.25
+        }).setView([48.8566, 2.3522], 13);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        // Intégration du fond de carte MapTiler Landscape (Optimisé mobile 512x512)
+        L.tileLayer('https://api.maptiler.com/maps/landscape-v4/{z}/{x}/{y}.png?key=TA_CLE_API_MAPTILER', {
             maxZoom: 19,
-            attribution: '© OpenStreetMap'
+            tileSize: 512,
+            zoomOffset: -1,
+            attribution: '© MapTiler © OpenStreetMap contributors'
         }).addTo(map);
 
         const boundsMarkers = [];
@@ -78,7 +86,7 @@
             boundsMarkers.push([latB, lngB]);
         }
 
-        // 3. Position du Livreur (Vert - Plus petit - Totalement FIXE)
+        // 3. Position du Livreur (Optionnel si tu veux la garder ou l'enlever)
         if (!isNaN(latLivreur) && latLivreur !== 0 && !isNaN(lngLivreur) && lngLivreur !== 0) {
             const iconLivreur = L.divIcon({
                 className: 'custom-pin',
@@ -86,38 +94,31 @@
                 iconSize: [16, 16],
                 iconAnchor: [8, 8]
             });
-            L.marker([latLivreur, lngLivreur], { icon: iconLivreur }).addTo(map).bindPopup("<b>📍 Votre dernière position enregistrée</b>");
+            L.marker([latLivreur, lngLivreur], { icon: iconLivreur }).addTo(map).bindPopup("<b>📍 Votre position</b>");
             boundsMarkers.push([latLivreur, lngLivreur]);
         }
 
-        // 4 & 5. Ligne, Panonceau et Animation (AVEC OSRM ROUTING - TRACÉ PAR LES RUES)
+        // 4. Tracé OSRM (Par les rues) + Panonceau de distance au milieu
         if (!isNaN(latA) && latA !== 0 && !isNaN(latB) && latB !== 0) {
-            
-            // On prépare l'URL pour interroger le GPS gratuit OSRM (attention, OSRM lit Longitude puis Latitude)
             const urlOSRM = `https://router.project-osrm.org/route/v1/driving/${lngA},${latA};${lngB},${latB}?overview=full&geometries=geojson`;
 
-            // On lance la requête au serveur
             fetch(urlOSRM)
                 .then(response => response.json())
                 .then(data => {
                     if (data.routes && data.routes.length > 0) {
                         const route = data.routes[0];
-                        
-                        // OSRM renvoie un tableau de coordonnées [lng, lat]. On les inverse en [lat, lng] pour Leaflet.
                         const routeCoords = route.geometry.coordinates.map(coord => [coord[1], coord[0]]);
 
-                        // Tracé en pointillés qui suit exactement les rues
+                        // Ligne de l'itinéraire
                         L.polyline(routeCoords, { 
-                            color: '#003366', 
+                            color: '#FF9100', 
                             weight: 4, 
                             opacity: 0.7, 
-                            dashArray: '6, 6' 
+                            dashArray: '8, 8' 
                         }).addTo(map);
 
-                        // Panonceau de distance (On utilise la VRAIE distance routière renvoyée par le GPS)
+                        // Panonceau de distance au milieu
                         const distanceKm = (route.distance / 1000).toFixed(1);
-                        
-                        // On place le badge exactement au milieu du chemin tracé (sur la route !)
                         const midIndex = Math.floor(routeCoords.length / 2);
                         const distanceIcon = L.divIcon({
                             className: '',
@@ -126,55 +127,20 @@
                             iconAnchor: [35, 12]
                         });
                         L.marker(routeCoords[midIndex], { icon: distanceIcon }).addTo(map);
-
-                        // Curseur d'animation (qui va suivre les courbes de la route)
-                        const iconAnim = L.divIcon({
-                            className: 'custom-pin',
-                            html: `<svg width="16" height="22" viewBox="0 0 16 22" xmlns="http://www.w3.org/2000/svg">
-                                       <circle cx="8" cy="8" r="6" fill="transparent" stroke="black" stroke-width="2.5"/>
-                                       <line x1="8" y1="14" x2="8" y2="22" stroke="black" stroke-width="2.5"/>
-                                   </svg>`,
-                            iconSize: [16, 22],
-                            iconAnchor: [8, 22]
-                        });
-                        
-                        const animatedMarker = L.marker(routeCoords[0], { icon: iconAnim }).addTo(map);
-
-                        let step = 0;
-                        function moveCursor() {
-                            step += 0.2; // VITESSE: Modifie ce chiffre pour accélérer ou ralentir l'animation (ex: 0.1 ou 0.5)
-                            let index = Math.floor(step);
-                            
-                            // On recommence au début quand on arrive à destination
-                            if (index >= routeCoords.length - 1) {
-                                step = 0;
-                                index = 0;
-                            }
-
-                            // Interpolation douce pour que l'épingle glisse parfaitement entre les virages
-                            const p1 = routeCoords[index];
-                            const p2 = routeCoords[index + 1];
-                            const fraction = step - index;
-                            
-                            const currentLat = p1[0] + (p2[0] - p1[0]) * fraction;
-                            const currentLng = p1[1] + (p2[1] - p1[1]) * fraction;
-
-                            animatedMarker.setLatLng([currentLat, currentLng]);
-                            requestAnimationFrame(moveCursor);
-                        }
-                        requestAnimationFrame(moveCursor);
                     }
                 })
                 .catch(error => console.error("Erreur lors du tracé de la route:", error));
         }
 
-       // 6. Cadrage automatique de la carte (Retour à ton code d'origine)
+        // 5. Cadrage automatique fluide et ajusté aux petits écrans
         if (boundsMarkers.length > 0) {
             const group = L.featureGroup(boundsMarkers.map(coords => L.marker(coords)));
-            
-            // On utilise ta méthode d'origine (pad), mais on limite le zoom maximum à 15
-            map.fitBounds(group.getBounds().pad(0.1), {
-                maxZoom: 15
+            map.fitBounds(group.getBounds(), {
+                animate: true,
+                duration: 0.8,
+                paddingTopLeft: [20, 20],
+                paddingBottomRight: [20, 20],
+                maxZoom: 16
             });
         }
     </script>
