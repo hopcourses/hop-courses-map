@@ -204,7 +204,7 @@ function recentrerCarte(donneesCourse){
             animate: true,
             duration: 0.8,
             paddingTopLeft: [40, 40],
-            paddingBottomRight: [30, 30],
+            paddingBottomRight: [40, 40],
             maxZoom: 10
         }
     );
