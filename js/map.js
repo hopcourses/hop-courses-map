@@ -203,9 +203,9 @@ function recentrerCarte(donneesCourse){
         {
             animate: true,
         duration: 0.8,
-        paddingTopLeft: [15, 15],
-        paddingBottomRight: [15, 15],
-        maxZoom: 14
+        paddingTopLeft: [20, 20],
+        paddingBottomRight: [20, 20],
+        maxZoom: 16
         }
     );
 }
