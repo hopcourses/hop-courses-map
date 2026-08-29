@@ -9,19 +9,6 @@
     <style>
         body, html { margin: 0; padding: 0; height: 100%; width: 100%; }
         #map { height: 100%; width: 100%; }
-        /* Style du panonceau de distance */
-        .distance-badge {
-            background-color: #003366;
-            color: white;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 12px;
-            border: 2px solid white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-            text-align: center;
-            white-space: nowrap;
-        }
     </style>
 </head>
 <body>
@@ -42,20 +29,25 @@
         const lngA = parseCoord(params.get('lngA'));
         const latB = parseCoord(params.get('latB'));
         const lngB = parseCoord(params.get('lngB'));
-        const latLivreur = parseCoord(params.get('latLivreur'));
-        const lngLivreur = parseCoord(params.get('lngLivreur'));
 
-        const map = L.map('map').setView([50.7333, 2.7333], 13); // Centré vers Bailleul
+        const map = L.map('map', {
+            zoomControl: true,
+            attributionControl: true,
+            zoomSnap: 0.25,
+            zoomDelta: 0.25
+        }).setView([50.7333, 2.7333], 13); // Centré par défaut vers Bailleul
 
-        // Fond de carte OpenStreetMap Gratuit
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        // Intégration du fond de carte MapTiler Landscape
+        L.tileLayer('https://api.maptiler.com/maps/landscape-v4/{z}/{x}/{y}.png?key=ZVLCaLZfrUUaHWwdJ4rO', {
             maxZoom: 19,
-            attribution: '© OpenStreetMap'
+            tileSize: 512,
+            zoomOffset: -1,
+            attribution: '© MapTiler © OpenStreetMap contributors'
         }).addTo(map);
 
         const boundsMarkers = [];
 
-        // 1. Point A (Départ - Bleu foncé - FIXE)
+        // 1. Point A (Départ - Bleu foncé)
         if (!isNaN(latA) && latA !== 0 && !isNaN(lngA) && lngA !== 0) {
             const iconA = L.divIcon({
                 className: 'custom-pin',
@@ -63,11 +55,11 @@
                 iconSize: [24, 24],
                 iconAnchor: [12, 12]
             });
-            L.marker([latA, lngA], { icon: iconA }).addTo(map).bindPopup("<b>Adresse de départ</b>");
+            L.marker([latA, lngA], { icon: iconA }).addTo(map);
             boundsMarkers.push([latA, lngA]);
         }
 
-        // 2. Point B (Destination - Orange - FIXE)
+        // 2. Point B (Destination - Orange)
         if (!isNaN(latB) && latB !== 0 && !isNaN(lngB) && lngB !== 0) {
             const iconB = L.divIcon({
                 className: 'custom-pin',
@@ -75,99 +67,68 @@
                 iconSize: [24, 24],
                 iconAnchor: [12, 12]
             });
-            L.marker([latB, lngB], { icon: iconB }).addTo(map).bindPopup("<b>Adresse de destination</b>");
+            L.marker([latB, lngB], { icon: iconB }).addTo(map);
             boundsMarkers.push([latB, lngB]);
         }
 
-        // 3. Position du Livreur (Vert - Plus petit - Totalement FIXE)
-        if (!isNaN(latLivreur) && latLivreur !== 0 && !isNaN(lngLivreur) && lngLivreur !== 0) {
-            const iconLivreur = L.divIcon({
-                className: 'custom-pin',
-                html: '<div style="background-color: #10B981; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>',
-                iconSize: [16, 16],
-                iconAnchor: [8, 8]
-            });
-            L.marker([latLivreur, lngLivreur], { icon: iconLivreur }).addTo(map).bindPopup("<b>📍 Votre dernière position enregistrée</b>");
-            boundsMarkers.push([latLivreur, lngLivreur]);
-        }
-
-        // 4 & 5. Ligne, Panonceau et Animation (AVEC OSRM ROUTING - TRACÉ PAR LES RUES)
+        // 3. Tracé en ligne droite et Animation
         if (!isNaN(latA) && latA !== 0 && !isNaN(latB) && latB !== 0) {
             
-            // URL pour interroger le GPS gratuit OSRM
-            const urlOSRM = `https://router.project-osrm.org/route/v1/driving/${lngA},${latA};${lngB},${latB}?overview=full&geometries=geojson`;
+            const pointCollecte = [latA, lngA];
+            const pointLivraison = [latB, lngB];
+            const routeCoords = [pointCollecte, pointLivraison];
 
-            fetch(urlOSRM)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.routes && data.routes.length > 0) {
-                        const route = data.routes[0];
-                        
-                        // OSRM renvoie [lng, lat], inversion en [lat, lng] pour Leaflet
-                        const routeCoords = route.geometry.coordinates.map(coord => [coord[1], coord[0]]);
+            // Tracé de la ligne droite en pointillés
+            L.polyline(routeCoords, { 
+                color: '#FF9100', 
+                weight: 4, 
+                opacity: 0.7, 
+                dashArray: '8, 8' 
+            }).addTo(map);
 
-                        // Tracé en pointillés sur les rues
-                        L.polyline(routeCoords, { 
-                            color: '#003366', 
-                            weight: 4, 
-                            opacity: 0.7, 
-                            dashArray: '6, 6' 
-                        }).addTo(map);
+            // Calcul natif de la distance à vol d'oiseau (Leaflet)
+            const distMetres = map.distance(pointCollecte, pointLivraison);
+            const distanceKm = (distMetres / 1000).toFixed(1);
 
-                        // Panonceau de distance statique au centre
-                        const distanceKm = (route.distance / 1000).toFixed(1);
-                        const midIndex = Math.floor(routeCoords.length / 2);
-                        const distanceIcon = L.divIcon({
-                            className: '',
-                            html: `<div class="distance-badge">${distanceKm} km</div>`,
-                            iconSize: [70, 24],
-                            iconAnchor: [35, 12]
-                        });
-                        L.marker(routeCoords[midIndex], { icon: distanceIcon }).addTo(map);
+            // Icône animée personnalisée avec la distance
+            const iconLivreurAnime = L.divIcon({
+                className: "",
+                html: `
+                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none;">
+                        <div style="background: #003366; color: white; font-size: 11px; font-weight: bold; font-family: sans-serif; padding: 2px 7px; border-radius: 10px; border: 1px solid #00D26A; box-shadow: 0 2px 6px rgba(0,0,0,0.3); white-space: nowrap; margin-bottom: 2px;">
+                            ${distanceKm} km
+                        </div>
+                        <div style="font-size: 26px; line-height: 26px; text-align: center; transform: scaleX(-1); filter: drop-shadow(-2px 3px 4px rgba(0,0,0,0.4));">⚲</div>
+                    </div>
+                `,
+                iconSize: [60, 50],
+                iconAnchor: [30, 42]
+            });
 
-                        // Curseur d'animation SVG (Cercle avec une tige)
-                        const iconAnim = L.divIcon({
-                            className: 'custom-pin',
-                            html: `<svg width="16" height="22" viewBox="0 0 16 22" xmlns="http://www.w3.org/2000/svg">
-                                       <circle cx="8" cy="8" r="6" fill="transparent" stroke="black" stroke-width="2.5"/>
-                                       <line x1="8" y1="14" x2="8" y2="22" stroke="black" stroke-width="2.5"/>
-                                   </svg>`,
-                            iconSize: [16, 22],
-                            iconAnchor: [8, 22]
-                        });
-                        
-                        const animatedMarker = L.marker(routeCoords[0], { icon: iconAnim }).addTo(map);
+            const animatedMarker = L.marker(routeCoords[0], { icon: iconLivreurAnime }).addTo(map);
 
-                        let step = 0;
-                        function moveCursor() {
-                            step += 0.2; 
-                            let index = Math.floor(step);
-                            
-                            if (index >= routeCoords.length - 1) {
-                                step = 0;
-                                index = 0;
-                            }
+            // Animation ultra-fluide sur la ligne droite
+            let step = 0;
+            function moveCursor() {
+                step += 0.005; // Vitesse de l'animation : ajuste ce chiffre si ça va trop vite ou trop lentement
+                
+                if (step >= 1) {
+                    step = 0; // Recommence l'animation
+                }
 
-                            const p1 = routeCoords[index];
-                            const p2 = routeCoords[index + 1];
-                            const fraction = step - index;
-                            
-                            const currentLat = p1[0] + (p2[0] - p1[0]) * fraction;
-                            const currentLng = p1[1] + (p2[1] - p1[1]) * fraction;
+                // Interpolation linéaire entre A et B
+                const currentLat = pointCollecte[0] + (pointLivraison[0] - pointCollecte[0]) * step;
+                const currentLng = pointCollecte[1] + (pointLivraison[1] - pointCollecte[1]) * step;
 
-                            animatedMarker.setLatLng([currentLat, currentLng]);
-                            requestAnimationFrame(moveCursor);
-                        }
-                        requestAnimationFrame(moveCursor);
-                    }
-                })
-                .catch(error => console.error("Erreur lors du tracé de la route:", error));
+                animatedMarker.setLatLng([currentLat, currentLng]);
+                requestAnimationFrame(moveCursor);
+            }
+            requestAnimationFrame(moveCursor);
         }
 
-       // 6. Cadrage automatique corrigé pour Glide
+        // 4. Cadrage automatique de la carte (Zoom limité à 16)
         if (boundsMarkers.length > 0) {
             const group = L.featureGroup(boundsMarkers.map(coords => L.marker(coords)));
-            
             map.fitBounds(group.getBounds(), {
                 animate: true,
                 duration: 0.8,
