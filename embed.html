@@ -129,10 +129,10 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             const group = L.featureGroup(boundsMarkers.map(coords => L.marker(coords)));
             map.fitBounds(group.getBounds(), {
                 animate: true,
-                duration: 0.8,
+                duration: 1.0,
                 paddingTopLeft: [20, 80],
                 paddingBottomRight: [20, 80],
-                maxZoom: 13
+                maxZoom: 12
             });
         }
     </script>
