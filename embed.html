@@ -108,7 +108,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             // Animation ultra-fluide sur la ligne droite
             let step = 0;
             function moveCursor() {
-                step += 0.002; // Vitesse de l'animation : ajuste ce chiffre si ça va trop vite ou trop lentement
+                step += 0.001; // Vitesse de l'animation : ajuste ce chiffre si ça va trop vite ou trop lentement
                 
                 if (step >= 1) {
                     step = 0; // Recommence l'animation
@@ -130,8 +130,8 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             map.fitBounds(group.getBounds(), {
                 animate: true,
                 duration: 0.8,
-                paddingTopLeft: [20, 20],
-                paddingBottomRight: [20, 20],
+                paddingTopLeft: [20, 80],
+                paddingBottomRight: [20, 80],
                 maxZoom: 12
             });
         }
