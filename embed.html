@@ -37,13 +37,11 @@
             zoomDelta: 0.25
         }).setView([50.7333, 2.7333], 13); // Centré par défaut vers Bailleul
 
-        // Intégration du fond de carte MapTiler Landscape
-        L.tileLayer('https://api.maptiler.com/maps/landscape-v4/{z}/{x}/{y}.png?key=ZVLCaLZfrUUaHWwdJ4rO', {
-            maxZoom: 19,
-            tileSize: 512,
-            zoomOffset: -1,
-            attribution: '© MapTiler © OpenStreetMap contributors'
-        }).addTo(map);
+        // Fond de carte OpenStreetMap Gratuit
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© OpenStreetMap'
+}).addTo(map);
 
         const boundsMarkers = [];
 
@@ -110,7 +108,7 @@
             // Animation ultra-fluide sur la ligne droite
             let step = 0;
             function moveCursor() {
-                step += 0.005; // Vitesse de l'animation : ajuste ce chiffre si ça va trop vite ou trop lentement
+                step += 0.002; // Vitesse de l'animation : ajuste ce chiffre si ça va trop vite ou trop lentement
                 
                 if (step >= 1) {
                     step = 0; // Recommence l'animation
@@ -134,7 +132,7 @@
                 duration: 0.8,
                 paddingTopLeft: [20, 20],
                 paddingBottomRight: [20, 20],
-                maxZoom: 13
+                maxZoom: 12
             });
         }
     </script>
